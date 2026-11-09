@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Portfolio</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: schedule first (what needs attention), then positions, then forecast accuracy + learning, then the full log. */
+:root {
+  --bg: #f2f4f6; --surface: #ffffff; --ink: #16202a; --muted: #5b6874; --rule: #d3dae1; --accent: #1f4e79; --tint: #e7edf3;
+  --good: #0b7a59; --bad: #b02c4c; --warn: #9a5800;
+  --f-display: "IBM Plex Sans Condensed", "Arial Narrow", system-ui, sans-serif;
+  --f-body: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root {
+  --bg: #0e1318; --surface: #151c23; --ink: #e2e8ee; --muted: #94a2af; --rule: #28333e; --accent: #82b4e6; --tint: #1b2530;
+  --good: #4fcba1; --bad: #f27c93; --warn: #e6a94c; color-scheme: dark } }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 var(--f-body); }
+.wrap { max-width: 1100px; margin: 0 auto; padding: 24px 16px 64px; display: flex; flex-direction: column; gap: 18px; }
+h1, h2 { font-family: var(--f-display); font-weight: 600; margin: 0; line-height: 1.15; }
+h1 { font-size: 1.7rem; } h2 { font-size: 1.15rem; }
+a { color: var(--accent); }
+.eyebrow { font: 500 .72rem/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+button { font: inherit; color: inherit; background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 4px 9px; cursor: pointer; font-size: .82rem; }
+button:hover { border-color: var(--accent); }
+button.danger { border-color: var(--bad); color: var(--bad); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.panel { background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 16px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.hint { color: var(--muted); font-size: .85rem; margin: 0; max-width: 75ch; }
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: .87rem; min-width: 600px; }
+th { text-align: left; font: 500 .68rem/1.2 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding: 6px; border-bottom: 1px solid var(--ink); }
+td { padding: 8px 6px; border-bottom: 1px solid var(--rule); vertical-align: middle; }
+th.r, td.r { text-align: right; }
+td.m { font-family: var(--f-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+tr.total td { font-weight: 600; border-bottom: none; }
+.pos { color: var(--good); } .neg { color: var(--bad); }
+.chip { display: inline-block; font: 500 .7rem/1 var(--f-mono); padding: 4px 6px; border-radius: 3px; }
+.chip.due { background: color-mix(in srgb, var(--bad) 15%, transparent); color: var(--bad); }
+.chip.soon { background: color-mix(in srgb, var(--warn) 15%, transparent); color: var(--warn); }
+.chip.later { background: var(--tint); color: var(--muted); }
+.act { font-weight: 600; } .act.BUY, .act.COVER { color: var(--good); } .act.SELL, .act.SHORT { color: var(--bad); }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
+.tile { background: var(--tint); border-radius: 5px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; }
+.tile span { font-size: .75rem; color: var(--muted); }
+.tile output { font: 500 1.3rem/1.15 var(--f-mono); font-variant-numeric: tabular-nums; }
+.empty { color: var(--muted); font-size: .88rem; padding: 8px 0; }
+#status { color: var(--muted); font-size: .9rem; }
+
+.topnav { position: sticky; top: 0; z-index: 5; background: var(--surface); border-bottom: 1px solid var(--rule); }
+.topnav .in { max-width: 1180px; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; gap: 8px 20px; flex-wrap: wrap; }
+.brand { font: 600 1.1rem var(--f-display); color: var(--ink); text-decoration: none; }
+.tabs { display: flex; gap: 2px; }
+.tabs a { text-decoration: none; color: var(--muted); padding: 6px 11px; border-radius: 5px; font-weight: 500; font-size: .92rem; }
+.tabs a:hover { color: var(--ink); }
+.tabs a[aria-current] { background: var(--tint); color: var(--ink); }
+tr.closed td { color: var(--muted); }
+</style>
+</head>
+<body>
+<nav class="topnav" aria-label="Main"><div class="in"><a class="brand" href="/">Formula Lab</a><div class="tabs"><a href="/">Plan</a><a href="/journal" aria-current="page">Portfolio</a><a href="/forecast">Stock details</a><a href="/research">Research</a><a href="/builder">Formula builder</a></div></div></nav>
+<div class="wrap">
+  <div style="display:flex;flex-direction:column;gap:4px">
+    <h1>Portfolio</h1>
+    <span id="status">Loading your log and today's prices…</span>
+  </div>
+  <div class="tiles" id="summary"></div>
+
+  <section class="panel">
+    <h2>When to act next</h2>
+    <p class="hint">Your latest decision for each stock and when to look at it again. When a date arrives, re-run the forecast and log what you do.</p>
+    <div class="scroll" id="schedule"></div>
+  </section>
+
+  <section class="panel">
+    <h2>Positions</h2>
+    <p class="hint">Every stock the simulation (or you) bought. <b>Unrealized</b> = gain or loss on shares still held, at the latest close. <b>Realized</b> = profit or loss locked in when it was sold. Sold stocks are greyed out.</p>
+    <div class="scroll" id="positions"></div>
+  </section>
+
+  <section class="panel">
+    <h2>Forecast accuracy and learning</h2>
+    <p class="hint">Once a forecast's check date passes, its prediction is compared with what the stock actually did. Every result counts, right or wrong. The scale <b>k</b> is the adjustment applied to new forecasts: below 1 means your forecasts have been too big, above 1 too small. It starts at 1 and moves slowly, because a handful of results is mostly luck.</p>
+    <div class="tiles" id="calib"></div>
+    <div class="scroll" id="resolved"></div>
+  </section>
+
+  <section class="panel">
+    <h2>Log</h2>
+    <p class="hint">Everything you logged, newest first. Delete an entry if you logged it by mistake.</p>
+    <div class="scroll" id="log"></div>
+  </section>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const el = (tag, props = {}, ...kids) => { const e = Object.assign(document.createElement(tag), props); e.append(...kids); return e; };
+const pc = (x, d = 2) => x == null ? '—' : (x < 0 ? '−' : '+') + Math.abs(x * 100).toFixed(d) + '%';
+const usd = (x, sign) => x == null ? '—' : (x < 0 ? '−' : sign && x > 0 ? '+' : '') + '$' + Math.abs(x).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const cls = x => x > 0 ? 'pos' : x < 0 ? 'neg' : '';
+const iso = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+const nice = s => new Date(s + 'T12:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+const daysTo = s => Math.round((new Date(s + 'T12:00') - new Date(iso(new Date()) + 'T12:00')) / 864e5);
+const td = (text, c = '') => el('td', { className: c, textContent: text });
+const table = (head, rows) => el('table', {}, el('thead', {}, el('tr', {}, ...head.map(([h, r]) => el('th', { className: r ? 'r' : '', textContent: h })))), el('tbody', {}, ...rows));
+
+async function load() {
+  const J = await (await fetch('/api/journal')).json();
+  const E = J.entries;
+  $('status').textContent = E.length ? `${E.length} logged entries · prices as of the ${J.last_close} close` : 'Nothing logged yet. Run a forecast and press "I did this" to start.';
+
+  // Schedule: latest entry per ticker, only for stocks still held (a sold position needs nothing)
+  const open = new Set(J.positions.filter(p => Math.abs(p.shares) > 1e-9).map(p => p.ticker));
+  const latest = {};
+  for (const e of E) if (!latest[e.ticker] || e.created > latest[e.ticker].created) latest[e.ticker] = e;
+  const sched = Object.values(latest).filter(e => open.has(e.ticker) || e.action === 'HOLD').sort((a, b) => a.review_date.localeCompare(b.review_date));
+  $('schedule').replaceChildren(sched.length ? table([['Stock'], ['Last decision'], ['Check again'], ['Status'], ['']], sched.map(e => {
+    const d = daysTo(e.review_date), auto = e.source === 'sim';
+    const chip = auto ? ['later', d <= 0 ? 'sells at the open' : `sells in ${d} day${d === 1 ? '' : 's'}`]
+      : d < 0 ? ['due', `overdue ${-d} day${d === -1 ? '' : 's'}`] : d === 0 ? ['due', 'today'] : d <= 3 ? ['soon', `in ${d} day${d === 1 ? '' : 's'}`] : ['later', `in ${d} days`];
+    return el('tr', {}, td(e.ticker, 'm'),
+      el('td', {}, el('span', { className: 'act ' + e.action, textContent: e.action }), ` ${e.action === 'HOLD' ? '' : e.shares + ' @ ' + usd(e.price)} on ${nice(e.date)}`),
+      td(nice(e.review_date)), el('td', {}, el('span', { className: 'chip ' + chip[0], textContent: chip[1] })),
+      el('td', { className: 'r' }, auto ? el('span', { className: 'chip later', textContent: 'simulation · automatic' }) : el('a', { href: '/forecast?t=' + e.ticker, textContent: 'Re-run forecast →' })));
+  })) : el('p', { className: 'empty', textContent: 'No scheduled checks yet.' }));
+
+  // Positions
+  const P = J.positions;
+  const tot = P.reduce((a, p) => ({ value: a.value + (p.value || 0), cost: a.cost + p.cost, un: a.un + (p.unrealized || 0), re: a.re + p.realized }), { value: 0, cost: 0, un: 0, re: 0 });
+  const held = p => Math.abs(p.shares) > 1e-9;
+  const Ps = [...P].sort((a, b) => held(b) - held(a));  // open positions first, then ones already sold
+  $('positions').replaceChildren(P.length ? table([['Stock'], ['Shares', 1], ['Avg cost', 1], ['Price', 1], ['Value', 1], ['Unrealized', 1], ['Realized', 1]], [
+    ...Ps.map(p => held(p)
+      ? el('tr', {}, td(p.ticker, 'm'), td(p.shares < 0 ? `${p.shares} (short)` : +p.shares.toFixed(4), 'm r'), td(usd(p.avg_cost), 'm r'), td(usd(p.price), 'm r'), td(usd(p.value), 'm r'),
+          td(usd(p.unrealized, 1) + (p.cost > 0 ? ` (${pc(p.unrealized / p.cost, 1)})` : ''), 'm r ' + cls(p.unrealized)), td(usd(p.realized, 1), 'm r ' + cls(p.realized)))
+      : el('tr', { className: 'closed' }, td(p.ticker, 'm'), td('sold', 'r'), td('—', 'r'), td('—', 'r'), td('—', 'r'), td('—', 'r'), td(usd(p.realized, 1), 'm r ' + cls(p.realized)))),
+    el('tr', { className: 'total' }, td('Total'), td(''), td(''), td(''), td(usd(tot.value), 'm r'), td(usd(tot.un, 1), 'm r ' + cls(tot.un)), td(usd(tot.re, 1), 'm r ' + cls(tot.re)))]) :
+    el('p', { className: 'empty', textContent: 'No positions yet.' }));
+
+  // Learning
+  const C = J.calib;
+  const tile = (label, v, c = '') => el('div', { className: 'tile' }, el('span', { textContent: label }), el('output', { className: c, textContent: v }));
+  const due = sched.filter(e => e.source !== 'sim' && daysTo(e.review_date) <= 0).length;
+  $('summary').replaceChildren(
+    tile('Simulated account', usd(100 + tot.un + tot.re)),
+    tile('Total profit / loss', usd(tot.un + tot.re, 1), cls(tot.un + tot.re)),
+    tile('Checks due now', due, due ? 'neg' : ''),
+    tile('Next check', sched.length ? `${sched[0].ticker} · ${nice(sched[0].review_date)}` : '—'),
+    tile('Forecasts checked', C.n ? `${C.n} · k ${C.k.toFixed(2)}` : '0'));
+  $('calib').replaceChildren(
+    tile('Checked forecasts', C.n),
+    tile('Direction right', C.hit == null ? '—' : (C.hit * 100).toFixed(0) + '%'),
+    tile('Avg predicted', pc(C.avg_pred)), tile('Avg actual', pc(C.avg_actual), cls(C.avg_actual)),
+    tile('Best-fit scale', C.k_raw == null ? '—' : C.k_raw.toFixed(2)),
+    tile('k used now', C.k.toFixed(2)));
+  const R = [...J.resolved].sort((a, b) => b.review_date.localeCompare(a.review_date));
+  $('resolved').replaceChildren(R.length ? table([['Stock'], ['Logged'], ['Checked'], ['Predicted', 1], ['Actual', 1], ['Direction', 1]], R.map(r => {
+    const right = Math.sign(r.predicted) === Math.sign(r.actual);  // predicted direction vs actual direction
+    return el('tr', {}, td(r.ticker, 'm'), td(nice(r.date)), td(nice(r.review_date)), td(pc(r.predicted), 'm r'), td(pc(r.actual), 'm r ' + cls(r.actual)),
+      td(right ? 'right' : 'wrong', 'r ' + (right ? 'pos' : 'neg')));
+  })) : el('p', { className: 'empty', textContent: 'No forecast has reached its check date yet. Results appear here automatically when one does.' }));
+
+  // Log
+  const L = [...E].sort((a, b) => b.created.localeCompare(a.created));
+  $('log').replaceChildren(L.length ? table([['Date'], ['Stock'], ['Action'], ['Shares', 1], ['Price', 1], ['Forecast', 1], ['Check', 1], ['']], L.map(e => {
+    const del = el('button', { type: 'button', textContent: 'Delete' });
+    del.onclick = async () => {
+      if (!del.classList.contains('danger')) { del.classList.add('danger'); del.textContent = 'Confirm delete'; return; }
+      await fetch('/api/journal/delete', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: e.id }) });
+      load();
+    };
+    return el('tr', {}, td(nice(e.date)), td(e.ticker, 'm'), el('td', {}, el('span', { className: 'act ' + e.action, textContent: e.action })),
+      td(e.shares, 'm r'), td(usd(e.price), 'm r'), td(pc(e.forecast.mu) + ` / ${e.horizon}d`, 'm r'), td(nice(e.review_date), 'r'), el('td', { className: 'r' }, del));
+  })) : el('p', { className: 'empty', textContent: 'Empty.' }));
+}
+load();
+</script>
+</body>
+</html>

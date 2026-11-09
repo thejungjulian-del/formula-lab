@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Formula Lab</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: ticker bar on top; variables on the left, constants + formulas on the right. Same palette as the Trading Algorithm Blueprint. */
+:root {
+  --bg: #f2f4f6; --surface: #ffffff; --ink: #16202a; --muted: #5b6874; --rule: #d3dae1; --accent: #1f4e79; --tint: #e7edf3;
+  --c-x: #2f6a8c; --c-mu: #0b7a59; --bad: #b02c4c;
+  --f-display: "IBM Plex Sans Condensed", "Arial Narrow", system-ui, sans-serif;
+  --f-body: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root {
+  --bg: #0e1318; --surface: #151c23; --ink: #e2e8ee; --muted: #94a2af; --rule: #28333e; --accent: #82b4e6; --tint: #1b2530;
+  --c-x: #8fbcd8; --c-mu: #4fcba1; --bad: #f27c93; color-scheme: dark } }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 var(--f-body); }
+.wrap { max-width: 1240px; margin: 0 auto; padding: 24px 16px 64px; display: flex; flex-direction: column; gap: 20px; }
+h1, h2 { font-family: var(--f-display); font-weight: 600; margin: 0; line-height: 1.15; }
+h1 { font-size: 1.7rem; } h2 { font-size: 1.15rem; }
+.eyebrow { font: 500 .72rem/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+button, input { font: inherit; color: inherit; }
+button { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 7px 12px; cursor: pointer; }
+button:hover { border-color: var(--accent); }
+button.primary { background: var(--accent); border-color: var(--accent); color: var(--bg); font-weight: 600; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+input { background: var(--bg); border: 1px solid var(--rule); border-radius: 4px; padding: 7px 9px; min-width: 0; }
+
+.top { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 16px; }
+.top form { display: flex; gap: 8px; }
+#ticker { font: 600 1.1rem var(--f-mono); width: 9ch; text-transform: uppercase; }
+.stock { display: flex; flex-direction: column; gap: 4px; }
+#status { color: var(--muted); font-size: .9rem; }
+#status.err { color: var(--bad); }
+
+.grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 20px; align-items: start; }
+@media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+.panel { background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 16px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.panel-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.hint { color: var(--muted); font-size: .85rem; margin: 0; }
+
+table { border-collapse: collapse; width: 100%; font-size: .88rem; }
+td { padding: 6px 6px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+tr.group td { font: 500 .7rem/1 var(--f-mono); letter-spacing: .07em; text-transform: uppercase; color: var(--muted); padding-top: 14px; border-bottom: 1px solid var(--ink); }
+td.name button { font: 500 .82rem var(--f-mono); color: var(--c-x); background: none; border: none; padding: 0; text-align: left; }
+td.name button:hover { text-decoration: underline; }
+td.val { font-family: var(--f-mono); font-variant-numeric: tabular-nums; white-space: nowrap; text-align: right; }
+td.val.na { color: var(--muted); }
+td.mean { color: var(--muted); font-size: .82rem; }
+
+.rows { display: flex; flex-direction: column; gap: 10px; }
+.frow { display: grid; grid-template-columns: 10ch auto minmax(0, 1fr) 13ch auto; gap: 8px; align-items: center; }
+.frow .eq { color: var(--muted); font-family: var(--f-mono); }
+.frow .fname { font: 500 .88rem var(--f-mono); color: var(--c-mu); }
+.frow .fexpr { font: .88rem var(--f-mono); }
+.frow .res { font: 500 .95rem var(--f-mono); font-variant-numeric: tabular-nums; text-align: right; display: flex; flex-direction: column; line-height: 1.2; }
+.frow .res small { color: var(--muted); font-size: .72rem; font-weight: 400; }
+.frow .note { grid-column: 3 / -1; font-size: .8rem; color: var(--muted); background: none; border-color: transparent; padding: 2px 9px; }
+.frow .note:hover, .frow .note:focus { border-color: var(--rule); }
+.frow .err { grid-column: 3 / -1; color: var(--bad); font-size: .8rem; }
+.frow + .frow { border-top: 1px solid var(--rule); padding-top: 10px; }
+.x { border: none; background: none; color: var(--muted); padding: 4px 6px; }
+.x:hover { color: var(--bad); }
+@media (max-width: 560px) {
+  .frow { grid-template-columns: 1fr auto; }
+  .frow .eq { display: none; }
+  .frow .fexpr, .frow .note, .frow .err { grid-column: 1 / -1; }
+  .frow .res { text-align: left; }
+}
+
+.prow { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
+.param { display: grid; grid-template-columns: minmax(0, 1fr) 9ch auto; gap: 4px; align-items: center; }
+.param .pname { font: 500 .82rem var(--f-mono); }
+.param .pval { font: .85rem var(--f-mono); text-align: right; }
+.actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+#saved { color: var(--muted); font-size: .85rem; }
+.syntax { background: var(--tint); border-radius: 4px; padding: 10px 12px; font-size: .82rem; color: var(--muted); }
+.syntax code { font-family: var(--f-mono); color: var(--ink); }
+
+.topnav { position: sticky; top: 0; z-index: 5; background: var(--surface); border-bottom: 1px solid var(--rule); }
+.topnav .in { max-width: 1180px; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; gap: 8px 20px; flex-wrap: wrap; }
+.brand { font: 600 1.1rem var(--f-display); color: var(--ink); text-decoration: none; }
+.tabs { display: flex; gap: 2px; }
+.tabs a { text-decoration: none; color: var(--muted); padding: 6px 11px; border-radius: 5px; font-weight: 500; font-size: .92rem; }
+.tabs a:hover { color: var(--ink); }
+.tabs a[aria-current] { background: var(--tint); color: var(--ink); }
+</style>
+</head>
+<body>
+<nav class="topnav" aria-label="Main"><div class="in"><a class="brand" href="/">Formula Lab</a><div class="tabs"><a href="/">Plan</a><a href="/journal">Portfolio</a><a href="/forecast">Stock details</a><a href="/research">Research</a><a href="/builder" aria-current="page">Formula builder</a></div></div></nav>
+<div class="wrap">
+  <div class="top">
+    <div class="stock">
+      <span class="eyebrow">Formula builder</span>
+      <h1 id="title">Load a ticker</h1>
+      <span id="status">Pulling 5 years of daily prices from Yahoo Finance.</span>
+    </div>
+    <form id="tform">
+      <input id="ticker" aria-label="Ticker" value="AAPL" autocomplete="off" spellcheck="false">
+      <button class="primary" type="submit">Load</button>
+    </form>
+  </div>
+
+  <div class="grid">
+    <section class="panel">
+      <div class="panel-head"><h2>Baseline variables</h2></div>
+      <p class="hint">Computed for this stock from real data. Click a name to insert it into the formula you're editing.</p>
+      <table><tbody id="vars"></tbody></table>
+    </section>
+
+    <div style="display:flex;flex-direction:column;gap:20px;min-width:0">
+      <section class="panel">
+        <div class="panel-head"><h2>Constants</h2><button type="button" id="addParam">+ Add constant</button></div>
+        <p class="hint">Your settings. They stay the same for every stock.</p>
+        <div class="prow" id="params"></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head"><h2>Formulas</h2><button type="button" id="addFormula">+ Add formula</button></div>
+        <p class="hint">Run top to bottom. Each result becomes a variable the formulas below it can use.</p>
+        <div class="rows" id="formulas"></div>
+        <div class="actions"><button class="primary" type="button" id="save">Save formulas</button><span id="saved"></span></div>
+        <div class="syntax">Use <code>+ − * /</code>, <code>^</code> for powers, parentheses, and <code>min() max() abs() sqrt() log() exp()</code>. Example: <code>mu / (lam * vol_63d^2)</code></div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const FN = { min: Math.min, max: Math.max, abs: Math.abs, sqrt: Math.sqrt, log: Math.log, exp: Math.exp };
+let V = {}, META = {}, F = { params: {}, formulas: [] }, lastExpr = null;
+
+const sig = new Intl.NumberFormat('en-US', { maximumSignificantDigits: 4 });
+function fmt(v, unit) {
+  if (v == null) return '—';
+  if (typeof v === 'string') return v;
+  if (unit === 'pct') return (v * 100).toFixed(2) + '%';
+  if (unit === 'usd') return v >= 1e9 ? '$' + (v / 1e9).toFixed(1) + 'B' : v >= 1e6 ? '$' + (v / 1e6).toFixed(1) + 'M' : '$' + v.toFixed(2);
+  if (unit === 'bps') return v.toFixed(1) + ' bps';
+  if (unit === 'days') return v.toFixed(0) + ' d';
+  if (unit === 'z') return (v > 0 ? '+' : '') + v.toFixed(2);
+  return sig.format(v);
+}
+const el = (tag, props = {}, ...kids) => { const e = Object.assign(document.createElement(tag), props); e.append(...kids); return e; };
+
+function renderVars() {
+  const tb = $('vars'); tb.replaceChildren();
+  let group = null;
+  for (const [k, [g, meaning, unit]] of Object.entries(META)) {
+    if (g !== group) { group = g; tb.append(el('tr', { className: 'group' }, el('td', { colSpan: 3, textContent: g }))); }
+    const v = V[k];
+    const btn = el('button', { type: 'button', textContent: k, title: 'Insert ' + k });
+    btn.onclick = () => insert(k);
+    tb.append(el('tr', {},
+      el('td', { className: 'name' }, btn),
+      el('td', { className: 'val' + (v == null ? ' na' : ''), textContent: fmt(v, unit), title: v == null ? 'Not available for this stock' : String(v) }),
+      el('td', { className: 'mean', textContent: meaning })));
+  }
+}
+
+function insert(name) {
+  const t = lastExpr && document.body.contains(lastExpr) ? lastExpr : null;
+  if (!t) return;
+  const s = t.selectionStart ?? t.value.length, e = t.selectionEnd ?? s;
+  t.value = t.value.slice(0, s) + name + t.value.slice(e);
+  t.focus(); t.setSelectionRange(s + name.length, s + name.length);
+  t.dispatchEvent(new Event('input'));
+}
+
+function dirty() { $('saved').textContent = 'Unsaved changes'; }
+
+function renderParams() {
+  const box = $('params'); box.replaceChildren();
+  for (const k of Object.keys(F.params)) {
+    const name = el('input', { className: 'pname', value: k, 'aria-label': 'Constant name' });
+    const val = el('input', { className: 'pval', value: F.params[k], 'aria-label': k + ' value', inputMode: 'decimal' });
+    const del = el('button', { type: 'button', className: 'x', textContent: '×', title: 'Remove ' + k });
+    name.onchange = () => { const v = F.params[k]; delete F.params[k]; F.params[name.value.trim()] = v; renderParams(); evaluate(); dirty(); };
+    val.oninput = () => { F.params[k] = val.value; evaluate(); dirty(); };
+    del.onclick = () => { delete F.params[k]; renderParams(); evaluate(); dirty(); };
+    box.append(el('div', { className: 'param' }, name, val, del));
+  }
+}
+
+function renderFormulas() {
+  const box = $('formulas'); box.replaceChildren();
+  F.formulas.forEach((f, i) => {
+    const name = el('input', { className: 'fname', value: f.name, 'aria-label': 'Formula name' });
+    const expr = el('input', { className: 'fexpr', value: f.expr, 'aria-label': f.name + ' formula', spellcheck: false });
+    const note = el('input', { className: 'note', value: f.note || '', placeholder: 'What this formula means', 'aria-label': f.name + ' note' });
+    const del = el('button', { type: 'button', className: 'x', textContent: '×', title: 'Delete ' + f.name });
+    name.oninput = () => { f.name = name.value.trim(); evaluate(); dirty(); };
+    expr.oninput = () => { f.expr = expr.value; evaluate(); dirty(); };
+    expr.onfocus = () => { lastExpr = expr; };
+    note.oninput = () => { f.note = note.value; dirty(); };
+    del.onclick = () => { F.formulas.splice(i, 1); renderFormulas(); evaluate(); dirty(); };
+    box.append(el('div', { className: 'frow' }, name, el('span', { className: 'eq', textContent: '=' }), expr,
+      el('div', { className: 'res', id: 'res' + i }), del, note, el('div', { className: 'err', id: 'err' + i })));
+  });
+}
+
+function evaluate() {
+  const scope = { ...FN };
+  for (const [k, v] of Object.entries(V)) if (typeof v === 'number') scope[k] = v;
+  for (const [k, v] of Object.entries(F.params)) if (v !== '' && isFinite(+v)) scope[k] = +v;
+  F.formulas.forEach((f, i) => {
+    const res = $('res' + i), err = $('err' + i);
+    res.replaceChildren(); err.textContent = '';
+    try {
+      if (!/^[A-Za-z_]\w*$/.test(f.name)) throw new Error('Name must start with a letter and use only letters, digits and _');
+      const ex = f.expr.replace(/\^/g, '**');
+      const missing = [...new Set(ex.match(/\b[A-Za-z_]\w*/g) || [])].filter(id => !(id in scope));
+      if (missing.length) throw new Error('No value for ' + missing.join(', ') + (missing.some(m => m in META) ? ' (not available for this stock)' : ''));
+      const v = Function(...Object.keys(scope), `"use strict"; return (${ex});`)(...Object.values(scope));
+      if (typeof v !== 'number' || !isFinite(v)) throw new Error('Result is not a number');
+      scope[f.name] = v;
+      res.append(sig.format(v));
+      if (v !== 0 && Math.abs(v) < 1) res.append(el('small', { textContent: (v * 100).toPrecision(3) + '%' }));
+    } catch (e) {
+      res.textContent = '—';
+      err.textContent = e instanceof SyntaxError ? 'Formula has a typo (check brackets and operators)' : e.message;
+    }
+  });
+}
+
+async function loadTicker(t) {
+  $('status').className = ''; $('status').textContent = 'Loading ' + t + '…';
+  try {
+    const r = await fetch('/api/vars?t=' + encodeURIComponent(t));
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error);
+    V = d.vars; META = d.meta;
+    $('title').textContent = d.ticker + (V.name ? ' · ' + V.name : '');
+    $('status').textContent = 'Data as of the ' + d.asof + ' close' + (V.sector ? ' · ' + V.sector : '');
+    try { localStorage.setItem('fl-ticker', d.ticker); } catch {}
+    renderVars(); evaluate();
+  } catch (e) {
+    $('status').className = 'err'; $('status').textContent = e.message;
+  }
+}
+
+$('tform').onsubmit = e => { e.preventDefault(); const t = $('ticker').value.trim().toUpperCase(); if (t) loadTicker(t); };
+$('addFormula').onclick = () => { F.formulas.push({ name: 'f' + (F.formulas.length + 1), expr: '', note: '' }); renderFormulas(); evaluate(); dirty(); };
+$('addParam').onclick = () => { let n = 1; while (('c' + n) in F.params) n++; F.params['c' + n] = 0; renderParams(); evaluate(); dirty(); };
+$('save').onclick = async () => {
+  const r = await fetch('/api/formulas', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(F) });
+  $('saved').textContent = r.ok ? 'Saved to formulas.json' : 'Save failed. Is the app still running?';
+};
+
+(async () => {
+  F = await (await fetch('/api/formulas')).json();
+  renderParams(); renderFormulas();
+  let t = 'AAPL'; try { t = localStorage.getItem('fl-ticker') || t; } catch {}
+  $('ticker').value = t; loadTicker(t);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+{
+ "frozen": "2026-10-17 15:33:57.024631",
+ "promoted": [
+  {
+   "feature": "overnight",
+   "measure": "xs",
+   "h": "ovn",
+   "search_t": 7.454012180494244,
+   "confirm_t": 2.0995055236592948
+  },
+  {
+   "feature": "gap_D",
+   "measure": "xs",
+   "h": "h0",
+   "search_t": -18.305880850628675,
+   "confirm_t": -5.173192890032984
+  },
+  {
+   "feature": "gap_D",
+   "measure": "xs",
+   "h": "h1",
+   "search_t": -14.10573786150804,
+   "confirm_t": -2.574940239874948
+  },
+  {
+   "feature": "gap_D",
+   "measure": "xs",
+   "h": "h4",
+   "search_t": -9.614985078905786,
+   "confirm_t": -2.7886047168636736
+  },
+  {
+   "feature": "gap_D_rel",
+   "measure": "xs",
+   "h": "h0",
+   "search_t": -13.579285974914349,
+   "confirm_t": -4.015840880712942
+  },
+  {
+   "feature": "gap_D_rel",
+   "measure": "abs",
+   "h": "h0",
+   "search_t": -10.209486432867243,
+   "confirm_t": -2.7998872050674066
+  },
+  {
+   "feature": "gap_D_rel",
+   "measure": "xs",
+   "h": "h4",
+   "search_t": -7.6230361263915185,
+   "confirm_t": -2.073997584398296
+  },
+  {
+   "feature": "close_loc",
+   "measure": "xs",
+   "h": "ovn",
+   "search_t": -16.254477405797648,
+   "confirm_t": -2.692708320132881
+  },
+  {
+   "feature": "vol_surprise",
+   "measure": "xs",
+   "h": "ovn",
+   "search_t": 5.6695585101551425,
+   "confirm_t": 2.0307847302965416
+  },
+  {
+   "feature": "dist_ma20",
+   "measure": "xs",
+   "h": "ovn",
+   "search_t": -8.107856736381722,
+   "confirm_t": -2.371160941709554
+  },
+  {
+   "feature": "ovn_mom_21",
+   "measure": "xs",
+   "h": "ovn",
+   "search_t": 9.872129861333443,
+   "confirm_t": 2.103917969854863
+  },
+  {
+   "feature": "ovn_mom_21",
+   "measure": "xs",
+   "h": "h0",
+   "search_t": -6.859343222524071,
+   "confirm_t": -2.0653543813108213
+  },
+  {
+   "feature": "intra_mom_21",
+   "measure": "xs",
+   "h": "ovn",
+   "search_t": -9.936898145116333,
+   "confirm_t": -2.492210521086693
+  },
+  {
+   "feature": "dollar_vol",
+   "measure": "xs",
+   "h": "h20",
+   "search_t": -5.4459688092450635,
+   "confirm_t": -2.323928551750012
+  },
+  {
+   "feature": "amihud",
+   "measure": "abs",
+   "h": "h1",
+   "search_t": 3.69136910099142,
+   "confirm_t": 2.0014230112638898
+  },
+  {
+   "feature": "amihud",
+   "measure": "xs",
+   "h": "h4",
+   "search_t": 6.739864149078563,
+   "confirm_t": 2.079308017026354
+  },
+  {
+   "feature": "amihud",
+   "measure": "xs",
+   "h": "h20",
+   "search_t": 6.692205565127019,
+   "confirm_t": 2.5068116191214407
+  },
+  {
+   "feature": "earn_ahead",
+   "measure": "abs",
+   "h": "h1",
+   "search_t": 4.3266844686876285,
+   "confirm_t": 2.23212354884028
+  }
+ ],
+ "not_eligible_to_help": {
+  "features": [
+   "amihud",
+   "dollar_vol",
+   "price_level"
+  ],
+  "why": "Survivorship: the universe is TODAY's S&P 500, so stocks that were small/illiquid earlier are the ones that later grew into the index. Size/liquidity signals are biased upward by construction. Decided after the search, BEFORE the holdout was scored."
+ },
+ "notes": "Outlier/rank robustness checked on pre-2023 data before freezing: all promoted signals hold with |z|<3 and with ranks. Gap/close signals assume trading at the official opening/closing auction price."
+}

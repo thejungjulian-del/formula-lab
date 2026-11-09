@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Plan · Formula Lab</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: one column, nothing but the numbers and the steps. Safety bar → account tiles → plan choice → today's steps. */
+:root {
+  --bg: #f2f4f6; --surface: #ffffff; --ink: #16202a; --muted: #5b6874; --rule: #d3dae1; --accent: #1f4e79; --tint: #e7edf3;
+  --good: #0b7a59; --bad: #b02c4c; --warn: #9a5800;
+  --f-display: "IBM Plex Sans Condensed", "Arial Narrow", system-ui, sans-serif;
+  --f-body: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root {
+  --bg: #0e1318; --surface: #151c23; --ink: #e2e8ee; --muted: #94a2af; --rule: #28333e; --accent: #82b4e6; --tint: #1b2530;
+  --good: #4fcba1; --bad: #f27c93; --warn: #e6a94c; color-scheme: dark } }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 var(--f-body); }
+h1, h2 { font-family: var(--f-display); font-weight: 600; margin: 0; line-height: 1.15; }
+h1 { font-size: 1.6rem; } h2 { font-size: 1.15rem; }
+p { margin: 0; }
+button { font: inherit; color: inherit; background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 8px 14px; cursor: pointer; }
+button:hover:not(:disabled) { border-color: var(--accent); }
+button:disabled { opacity: .45; cursor: not-allowed; }
+button.primary { background: var(--accent); border-color: var(--accent); color: var(--bg); font-weight: 600; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.m { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.muted { color: var(--muted); }
+.pos { color: var(--good); } .neg { color: var(--bad); }
+
+.topnav { position: sticky; top: 0; z-index: 5; background: var(--surface); border-bottom: 1px solid var(--rule); }
+.topnav .in { max-width: 860px; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; gap: 8px 20px; flex-wrap: wrap; }
+.brand { font: 600 1.1rem var(--f-display); color: var(--ink); text-decoration: none; }
+.tabs { display: flex; gap: 2px; flex-wrap: wrap; }
+.tabs a { text-decoration: none; color: var(--muted); padding: 6px 11px; border-radius: 5px; font-weight: 500; font-size: .92rem; }
+.tabs a:hover { color: var(--ink); }
+.tabs a[aria-current] { background: var(--tint); color: var(--ink); }
+
+.wrap { max-width: 860px; margin: 0 auto; padding: 20px 16px 70px; display: flex; flex-direction: column; gap: 16px; }
+.health { display: flex; gap: 10px; align-items: flex-start; padding: 11px 14px; border-radius: 8px; font-size: .92rem; border: 1px solid var(--rule); background: var(--surface); }
+.health b { white-space: nowrap; }
+.health.ok b { color: var(--good); }
+.health.bad { border-color: var(--bad); background: color-mix(in srgb, var(--bad) 8%, var(--surface)); }
+.health.bad b { color: var(--bad); }
+.health ul { margin: 4px 0 0; padding-left: 18px; }
+.tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 640px) { .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.tile { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.tile span { font-size: .78rem; color: var(--muted); }
+.tile output { font: 500 1.4rem/1.15 var(--f-mono); font-variant-numeric: tabular-nums; }
+.tile small { font-size: .74rem; color: var(--muted); }
+.bar { height: 5px; background: var(--tint); border-radius: 3px; overflow: hidden; margin-top: 4px; }
+.bar i { display: block; height: 100%; background: var(--accent); }
+
+
+#steps { display: flex; flex-direction: column; gap: 10px; }
+.step { background: var(--surface); border: 1px solid var(--rule); border-left: 5px solid var(--rule); border-radius: 8px; padding: 16px 18px;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px 18px; align-items: start; }
+.step[data-status="now"] { border-left-color: var(--good); }
+.step[data-status="done"] { border-left-color: var(--accent); }
+.step[data-status="missed"] { opacity: .7; }
+.step .when { font: 500 .78rem/1.3 var(--f-mono); color: var(--muted); text-transform: uppercase; letter-spacing: .04em; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.pill { font: 600 .7rem/1 var(--f-mono); padding: 4px 8px; border-radius: 999px; text-transform: uppercase; letter-spacing: .05em; }
+.pill.now { background: color-mix(in srgb, var(--good) 18%, transparent); color: var(--good); }
+.pill.later { background: var(--tint); color: var(--muted); }
+.pill.done { background: color-mix(in srgb, var(--accent) 18%, transparent); color: var(--accent); }
+.pill.missed { background: color-mix(in srgb, var(--warn) 16%, transparent); color: var(--warn); }
+.step h2 { margin-top: 4px; }
+.orders { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.orders span { font: .82rem var(--f-mono); background: var(--tint); border-radius: 5px; padding: 4px 8px; }
+.nums { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 10px; font-size: .86rem; }
+.nums b { font-family: var(--f-mono); font-weight: 500; }
+.step .note { font-size: .82rem; color: var(--muted); margin-top: 8px; }
+.step .act { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+@media (max-width: 640px) { .step { grid-template-columns: 1fr; } .step .act { align-items: stretch; } }
+.msg { font-size: .82rem; max-width: 26ch; text-align: right; }
+.msg.ok { color: var(--good); } .msg.err { color: var(--bad); }
+.conf { font-size: .86rem; color: var(--muted); background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 10px 14px; }
+.conf b { color: var(--ink); font-family: var(--f-mono); font-weight: 500; }
+.foot { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; align-items: center; font-size: .82rem; color: var(--muted); }
+.foot a { color: var(--accent); }
+.orders2 table { border-collapse: collapse; width: 100%; font-size: .86rem; }
+.orders2 th { text-align: left; font: 500 .68rem/1.2 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding: 6px; border-bottom: 1px solid var(--ink); }
+.orders2 td { padding: 7px 6px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.st { font: 600 .68rem/1 var(--f-mono); padding: 3px 7px; border-radius: 999px; text-transform: uppercase; }
+.st.queued, .st.open { background: color-mix(in srgb, var(--accent) 18%, transparent); color: var(--accent); }
+.st.closed { background: color-mix(in srgb, var(--good) 18%, transparent); color: var(--good); }
+.st.missed, .st.not_filled, .st.blocked { background: color-mix(in srgb, var(--warn) 16%, transparent); color: var(--warn); }
+.result { font-size: .82rem; margin-top: 8px; display: flex; flex-direction: column; gap: 3px; }
+.result .ok { color: var(--good); } .result .no { color: var(--muted); }
+.shorts { font-size: .8rem; color: var(--muted); margin-top: 8px; }
+.scroll { overflow-x: auto; }
+</style>
+</head>
+<body>
+<nav class="topnav" aria-label="Main">
+  <div class="in">
+    <a class="brand" href="/">Formula Lab</a>
+    <div class="tabs"><a href="/" aria-current="page">Plan</a><a href="/journal">Portfolio</a><a href="/forecast">Stock details</a><a href="/research">Research</a></div>
+  </div>
+</nav>
+
+<main class="wrap">
+  <div class="health" id="health"><b>Checking…</b><span>Making sure the data is fresh and correct before anything is bought.</span></div>
+
+  <div class="tiles">
+    <div class="tile"><span>Simulated account</span><output id="tSim">—</output><small id="tSimNote">started at $100</small></div>
+    <div class="tile"><span id="tAcctLabel">Alpaca account</span><output id="tAcct">—</output><small id="tAcctNote"></small></div>
+    <div class="tile"><span>Orders working</span><output id="tOrders">—</output><small id="tOrdersNote"></small></div>
+    <div class="tile"><span>Goal: $10,000</span><output id="tGoal">—</output><div class="bar"><i id="goalBar" style="width:0"></i></div></div>
+  </div>
+
+  <p class="conf" id="conf"></p>
+
+  <div id="steps"></div>
+
+  <section class="step orders2" data-status="later">
+    <div style="grid-column: 1 / -1; min-width: 0">
+      <div class="when"><span class="pill later">Queue</span>Orders sent to Alpaca run themselves at the times shown</div>
+      <div class="scroll" id="queue"></div>
+    </div>
+  </section>
+
+  <div class="foot">
+    <span id="updated">—</span>
+    <span><button type="button" id="refresh">Update the ranking now</button></span>
+  </div>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+const el = (tag, props = {}, ...kids) => { const e = Object.assign(document.createElement(tag), props); e.append(...kids); return e; };
+const usd = x => (x < 0 ? '−' : '') + '$' + Math.abs(x).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const sgn = x => (x >= 0 ? '+' : '') + usd(x);
+const pct = x => (x * 100).toFixed(1) + '%';
+const time = s => new Date(s).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+const when = s => new Date(s).toLocaleString('en-US', { weekday: 'short', hour: 'numeric', minute: '2-digit' });
+let S = null;
+const results = {};  // last Follow result per part, kept across refreshes
+
+function renderHealth(H) {
+  const bad = H.checks.filter(c => c.blocks), fixing = H.checks.filter(c => c.fixing);
+  $('health').className = 'health ' + (H.ok ? 'ok' : 'bad');
+  $('health').replaceChildren(
+    el('b', { textContent: H.ok ? '✓ Safe to follow' : '✗ Buying is paused' }),
+    el('div', {},
+      el('span', { textContent: H.ok ? `All ${H.checks.length} checks passed at ${time(H.time)}. The broker re-checks before every buy.` : 'Something is off, so no new buys go out (already-bought stocks still get sold on time).' }),
+      ...(bad.length || fixing.length || Object.keys(H.excluded).length ? [el('ul', {},
+        ...bad.map(c => el('li', { textContent: `${c.name}: ${c.detail}` })),
+        ...fixing.map(c => el('li', { textContent: `Fixing: ${c.fixing}` })),
+        ...Object.entries(H.excluded).map(([t, w]) => el('li', { textContent: `Left out of the plan: ${t} (${w})` })))] : [])));
+}
+
+async function renderTiles() {
+  const B = S.broker || {}, a = B.account || {};
+  $('tAcctLabel').textContent = B.paper === false ? 'Alpaca · REAL MONEY' : 'Alpaca · practice';
+  if (a.equity) {
+    $('tAcct').textContent = 'Connected'; $('tAcctNote').textContent = `orders capped at your ${usd(S.budget)} budget`;
+  } else {
+    $('tAcct').textContent = '—'; $('tAcctNote').textContent = (a.error || B.error || '').includes('keys') ? 'Add your Alpaca keys to ~/formula-lab/.env' : (a.error || B.error || 'not connected');
+  }
+  try {
+    const J = await (await fetch('/api/journal')).json();
+    const pl = J.positions.reduce((s, p) => s + p.realized + (p.unrealized || 0), 0);
+    $('tSim').textContent = usd(100 + pl); $('tSim').className = pl > 0 ? 'pos' : pl < 0 ? 'neg' : '';
+    $('tSimNote').textContent = `${sgn(pl)} since $100 · details on Portfolio`;
+  } catch {}
+  const working = (B.orders || []).filter(o => o.state === 'queued' || o.state === 'open');
+  $('tOrders').textContent = working.length;
+  $('tOrdersNote').textContent = working.length ? `${usd(working.reduce((s, o) => s + o.usd, 0))} committed` : 'nothing queued';
+  const value = parseFloat(($('tSim').textContent || '').replace(/[^0-9.]/g, '')) || 100;
+  $('tGoal').textContent = pct(value / 10000); $('goalBar').style.width = Math.min(100, value / 100) + '%';
+}
+
+function renderConf() {
+  const k = S.confidence, six = k.six_months_5_50_95;
+  $('conf').replaceChildren('How sure: this exact $100 plan (overnight only, 10 stocks, real fill times measured over 7 years, costs) on 2023–today won on ',
+    el('b', { textContent: `${(k.win_days * 100).toFixed(0)}% of days` }), ', about ', el('b', { textContent: `${k.per_day_usd >= 0 ? '+' : '−'}$${Math.abs(k.per_day_usd).toFixed(2)} a day` }),
+    ` (${(k.per_year * 100).toFixed(1)}% a year). Replayed 10,000 ways: ahead after a year `, el('b', { textContent: `${(k.year_p_ahead * 100).toFixed(0)}%` }),
+    ` of the time; $100 after 6 months typically `, el('b', { textContent: `$${six[1].toFixed(0)}` }), ` (bad case $${six[0].toFixed(0)}, good case $${six[2].toFixed(0)}). Past results, likely optimistic: paper-trade first.`);
+}
+
+const LABEL = { now: 'Follow now', later: 'Waiting', missed: 'Window passed', paused: 'Paused' };
+const untilText = iso => { const h = (new Date(iso) - new Date()) / 3.6e6; return h < 1 ? `in ${Math.max(0, Math.round(h * 60))} min` : h < 48 ? `in ${Math.round(h)} h` : `in ${Math.round(h / 24)} days`; };
+const TITLE = { day: 'Day trade: buy at the open, sell at the close', night: 'Overnight: buy just before the close, sell at the next open' };
+function renderLegs() {
+  $('steps').replaceChildren(...S.legs.map(L => {
+    const canFollow = L.status === 'now' && L.longs.length && S.health.ok;
+    const btn = el('button', { type: 'button', className: canFollow ? 'primary' : '', textContent: 'Follow · send to Alpaca', disabled: !canFollow });
+    const msg = el('span', { className: 'msg' });
+    if (L.status === 'now' && !S.health.ok) msg.textContent = 'Paused by the safety check above.';
+    btn.onclick = () => follow(L.leg, btn, msg);
+    const m = L.metrics;
+    const res = results[L.leg];
+    const card = el('section', { className: 'step' },
+      el('div', {},
+        el('div', { className: 'when' }, el('span', { className: 'pill ' + (L.status === 'missed' ? 'missed' : L.status), textContent: LABEL[L.status] }), L.when),
+        el('h2', { textContent: TITLE[L.leg] }),
+        L.status === 'paused' ? el('p', { className: 'note', textContent: L.paused }) :
+        L.longs.length ? el('div', { className: 'orders' }, ...L.longs.map(o => el('span', { textContent: `${o.symbol} ${usd(o.usd)}`, title: o.why }))) :
+          el('div', {},
+            el('p', { className: 'note', textContent: `Next picks: ${new Date(L.next_at).toLocaleString('en-US', { weekday: 'long', hour: 'numeric', minute: '2-digit', timeZone: 'America/Los_Angeles' })} PT (${untilText(L.next_at)}). The simulation trades them automatically; Follow also sends them to Alpaca.` }),
+            L.preview.length ? el('p', { className: 'shorts', textContent: `Last session's picks, for reference only${L.leg === 'day' ? ' (the news check runs live at 6:31, so some of these could be skipped)' : ''}: ${L.preview.join(', ')}` }) : ''),
+        L.longs.length ? el('div', { className: 'nums' }, ...[['Expected profit', sgn(m.expected)], ['Chance it makes money', pct(m.win)], ['Costs', usd(m.cost)], ['Bad day (1 in 20)', sgn(m.bad)]]
+          .map(([k, v]) => el('span', {}, k + ' ', el('b', { textContent: v })))) : '',
+        L.status !== 'paused' && L.skipped_news.length ? el('p', { className: 'shorts', textContent: `Passed over (news overnight, so the gap tends to keep going): ${L.skipped_news.map(s => s.symbol + (s.why === 'news not checked' ? ' (unchecked)' : '')).join(', ')}` }) : '',
+        L.status !== 'paused' && L.shorts.length ? el('p', { className: 'shorts', textContent: `Short ideas, not tradeable at $100 (needs a $2,000 margin account): ${L.shorts.map(s => s.symbol).join(', ')}` }) : '',
+        res ? el('div', { className: 'result' },
+          ...res.queued.map(o => el('span', { className: 'ok', textContent: `✓ ${o.symbol} ${usd(o.usd)}: buys ${when(o.enter_at)}, sells ${when(o.exit_at)}` })),
+          ...res.skipped.map(o => el('span', { className: 'no', textContent: `– ${o.symbol}: ${o.reason}` }))) : ''),
+      el('div', { className: 'act' }, btn, msg));
+    card.dataset.status = L.status === 'now' ? 'now' : L.status === 'missed' || L.status === 'paused' ? 'missed' : 'later';
+    return card;
+  }));
+}
+
+const STATE = { queued: 'Queued', open: 'Bought', closed: 'Sold', missed: 'Missed', blocked: 'Blocked', not_filled: 'Not filled' };
+function renderQueue() {
+  const rows = [...((S.broker || {}).orders || [])].reverse().slice(0, 40);
+  if (!rows.length) { $('queue').replaceChildren(el('p', { className: 'note', textContent: 'Nothing sent yet. Follow a part of the plan above.' })); return; }
+  $('queue').replaceChildren(el('table', {}, el('thead', {}, el('tr', {}, ...['Stock', 'Amount', 'Buys', 'Sells', 'Status', 'Detail'].map(h => el('th', { textContent: h })))),
+    el('tbody', {}, ...rows.map(o => el('tr', {},
+      el('td', { className: 'm', textContent: o.symbol }), el('td', { className: 'm', textContent: usd(o.usd) }),
+      el('td', { textContent: when(o.enter_at) }), el('td', { textContent: when(o.exit_at) }),
+      el('td', {}, el('span', { className: 'st ' + o.state, textContent: STATE[o.state] || o.state })),
+      el('td', { className: 'muted', textContent: o.error || o.reason || (o.entry_px ? `bought $${(+o.entry_px).toFixed(2)}` + (o.exit_px ? `, sold $${(+o.exit_px).toFixed(2)}` : '') : '') }))))));
+}
+
+async function follow(leg, btn, msg) {
+  btn.disabled = true; msg.className = 'msg'; msg.textContent = 'Sending to Alpaca…';
+  try {
+    const r = await fetch('/api/follow', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ leg }) });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error);
+    results[leg] = d;
+    msg.className = 'msg ok';
+    msg.textContent = `${d.queued.length} order${d.queued.length === 1 ? '' : 's'} queued on ${d.paper ? 'practice money' : 'REAL MONEY'}.`;
+    load();
+  } catch (e) { msg.className = 'msg err'; msg.textContent = e.message; btn.disabled = false; }
+}
+
+async function load() {
+  try {
+    const r = await fetch('/api/plan'); S = await r.json();
+    if (!r.ok) throw new Error(S.error);
+  } catch (e) { $('health').className = 'health bad'; $('health').replaceChildren(el('b', { textContent: '✗ Can’t load the plan' }), el('span', { textContent: e.message })); return; }
+  renderHealth(S.health); renderTiles(); renderConf(); renderLegs(); renderQueue();
+  $('updated').textContent = `Updated ${time(S.now)} · ${S.ranked} stocks ranked` + (S.plan_date ? ` · plan for ${new Date(S.plan_date + 'T12:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}` : '');
+}
+$('refresh').onclick = async () => { $('refresh').disabled = true; $('refresh').textContent = 'Updating… (about 10–30 s)';
+  try { await fetch('/api/plan/refresh', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' }); } catch {}
+  $('refresh').disabled = false; $('refresh').textContent = 'Update the ranking now'; load(); };
+load();
+setInterval(() => { if (!document.hidden) load(); }, 30000);
+</script>
+</body>
+</html>

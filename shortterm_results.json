@@ -1,0 +1,2881 @@
+{
+  "generated": "2026-10-16",
+  "cost": 0.0005,
+  "split": "2019-01-01",
+  "coverage": {
+    "SPY": [
+      "2009-01-02",
+      "2026-10-16",
+      4475
+    ],
+    "QQQ": [
+      "2009-01-02",
+      "2026-10-16",
+      4475
+    ],
+    "IWM": [
+      "2009-01-02",
+      "2026-10-16",
+      4475
+    ],
+    "DIA": [
+      "2009-01-02",
+      "2026-10-16",
+      4475
+    ],
+    "XLK": [
+      "2009-01-02",
+      "2026-10-16",
+      4475
+    ],
+    "XLC": [
+      "2018-06-19",
+      "2026-10-16",
+      2094
+    ],
+    "XLV": [
+      "2009-01-02",
+      "2026-10-16",
+      4475
+    ],
+    "XLF": [
+      "2009-01-02",
+      "2026-10-16",
+      4475
+    ],
+    "XLE": [
+      "2009-01-02",
+      "2026-10-16",
+      4475
+    ],
+    "XLB": [
+      "2009-01-02",
+      "2026-10-16",
+      4475
+    ],
+    "XLI": [
+      "2009-01-02",
+      "2026-10-16",
+      4475
+    ],
+    "XLY": [
+      "2009-01-02",
+      "2026-10-16",
+      4475
+    ],
+    "XLP": [
+      "2009-01-02",
+      "2026-10-16",
+      4475
+    ],
+    "XLU": [
+      "2009-01-02",
+      "2026-10-16",
+      4475
+    ],
+    "XLRE": [
+      "2015-10-08",
+      "2026-10-16",
+      2772
+    ],
+    "AAPL": [
+      "2009-01-02",
+      "2026-10-16",
+      4475
+    ],
+    "MSFT": [
+      "2009-01-02",
+      "2026-10-16",
+      4475
+    ],
+    "NVDA": [
+      "2009-01-02",
+      "2026-10-16",
+      4475
+    ],
+    "AMZN": [
+      "2009-01-02",
+      "2026-10-16",
+      4475
+    ],
+    "GOOGL": [
+      "2009-01-02",
+      "2026-10-16",
+      4475
+    ],
+    "META": [
+      "2012-05-18",
+      "2026-10-16",
+      3624
+    ],
+    "TSLA": [
+      "2010-06-29",
+      "2026-10-16",
+      4101
+    ],
+    "JPM": [
+      "2009-01-02",
+      "2026-10-16",
+      4475
+    ],
+    "XOM": [
+      "2009-01-02",
+      "2026-10-16",
+      4475
+    ],
+    "UNH": [
+      "2009-01-02",
+      "2026-10-16",
+      4475
+    ],
+    "JNJ": [
+      "2009-01-02",
+      "2026-10-16",
+      4475
+    ],
+    "V": [
+      "2009-01-02",
+      "2026-10-16",
+      4475
+    ],
+    "PG": [
+      "2009-01-02",
+      "2026-10-16",
+      4475
+    ],
+    "HD": [
+      "2009-01-02",
+      "2026-10-16",
+      4475
+    ],
+    "KO": [
+      "2009-01-02",
+      "2026-10-16",
+      4475
+    ],
+    "PEP": [
+      "2009-01-02",
+      "2026-10-16",
+      4475
+    ],
+    "COST": [
+      "2009-01-02",
+      "2026-10-16",
+      4475
+    ],
+    "WMT": [
+      "2009-01-02",
+      "2026-10-16",
+      4475
+    ],
+    "BAC": [
+      "2009-01-02",
+      "2026-10-16",
+      4475
+    ],
+    "AVGO": [
+      "2009-08-06",
+      "2026-10-16",
+      4326
+    ]
+  },
+  "results": [
+    {
+      "setup": "rsi2_low",
+      "desc": "RSI(2) below 10: sharply oversold over the last 2 days",
+      "at_open": false,
+      "side": "long",
+      "hold": 0,
+      "hold_name": "sell same day",
+      "in_sample": {
+        "trades": 7800,
+        "days": 1522,
+        "win": 0.5014102564102564,
+        "avg": 0.0003404042866900996,
+        "t": 1.0549245929232012,
+        "edge": 0.0006682444223339006,
+        "t_edge": 2.0709124496001614,
+        "worst": -0.19499980723853289
+      },
+      "in_sample_baseline": -0.0003278401356438011,
+      "out_of_sample": {
+        "trades": 7162,
+        "days": 1388,
+        "win": 0.5143814576933817,
+        "avg": 0.0002305682171754979,
+        "t": 0.6158386270814286,
+        "edge": 0.000395090852490529,
+        "t_edge": 1.0552721062374375,
+        "worst": -0.11768186353591709
+      },
+      "out_of_sample_baseline": -0.0001645226353150311,
+      "verified": false
+    },
+    {
+      "setup": "down3",
+      "desc": "Closed lower 3 days in a row",
+      "at_open": false,
+      "side": "long",
+      "hold": 0,
+      "hold_name": "sell same day",
+      "in_sample": {
+        "trades": 6979,
+        "days": 1519,
+        "win": 0.5083822897263218,
+        "avg": 0.0003147045356222511,
+        "t": 0.998268598400075,
+        "edge": 0.0006425446712660522,
+        "t_edge": 2.038204397422884,
+        "worst": -0.19499980723853289
+      },
+      "in_sample_baseline": -0.0003278401356438011,
+      "out_of_sample": {
+        "trades": 6636,
+        "days": 1420,
+        "win": 0.5120554550934298,
+        "avg": 0.0004388709440824996,
+        "t": 1.178563215867053,
+        "edge": 0.0006033935793975307,
+        "t_edge": 1.6203794918685823,
+        "worst": -0.09494897710060585
+      },
+      "out_of_sample_baseline": -0.0001645226353150311,
+      "verified": false
+    },
+    {
+      "setup": "big_drop",
+      "desc": "Fell more than 2\u00d7 its normal daily move",
+      "at_open": false,
+      "side": "long",
+      "hold": 0,
+      "hold_name": "sell same day",
+      "in_sample": {
+        "trades": 2684,
+        "days": 773,
+        "win": 0.4936661698956781,
+        "avg": -0.0011973462247372346,
+        "t": -2.0522084983181057,
+        "edge": -0.0008695060890934335,
+        "t_edge": -1.4903022605416276,
+        "worst": -0.12993764996460594
+      },
+      "in_sample_baseline": -0.0003278401356438011,
+      "out_of_sample": {
+        "trades": 2400,
+        "days": 674,
+        "win": 0.5183333333333333,
+        "avg": -6.137118197284157e-05,
+        "t": -0.10922267979078752,
+        "edge": 0.00010315145334218951,
+        "t_edge": 0.18357929236777695,
+        "worst": -0.06761308715114628
+      },
+      "out_of_sample_baseline": -0.0001645226353150311,
+      "verified": false
+    },
+    {
+      "setup": "close_near_low",
+      "desc": "Closed in the bottom 10% of the day's range",
+      "at_open": false,
+      "side": "long",
+      "hold": 0,
+      "hold_name": "sell same day",
+      "in_sample": {
+        "trades": 7620,
+        "days": 1391,
+        "win": 0.5073490813648294,
+        "avg": -0.0002544585685639446,
+        "t": -0.7612123203176029,
+        "edge": 7.338156707985646e-05,
+        "t_edge": 0.21952081732064835,
+        "worst": -0.13694284547168584
+      },
+      "in_sample_baseline": -0.0003278401356438011,
+      "out_of_sample": {
+        "trades": 7270,
+        "days": 1242,
+        "win": 0.5116918844566712,
+        "avg": 3.741100512600709e-05,
+        "t": 0.10838106611094349,
+        "edge": 0.00020193364044103818,
+        "t_edge": 0.5850092281923017,
+        "worst": -0.08825274007632883
+      },
+      "out_of_sample_baseline": -0.0001645226353150311,
+      "verified": false
+    },
+    {
+      "setup": "above_200",
+      "desc": "Price above its 200-day average (uptrend)",
+      "at_open": false,
+      "side": "long",
+      "hold": 0,
+      "hold_name": "sell same day",
+      "in_sample": {
+        "trades": 58773,
+        "days": 2264,
+        "win": 0.4940363772480561,
+        "avg": -0.0003350282947898725,
+        "t": -2.1687886724834953,
+        "edge": -7.188159146071416e-06,
+        "t_edge": -0.04653218362283702,
+        "worst": -0.19803522572241478
+      },
+      "in_sample_baseline": -0.0003278401356438011,
+      "out_of_sample": {
+        "trades": 50324,
+        "days": 1958,
+        "win": 0.4968404737302281,
+        "avg": -0.00027373817001183283,
+        "t": -1.4883813769605239,
+        "edge": -0.00010921553469680174,
+        "t_edge": -0.5938315723761831,
+        "worst": -0.12839712206453596
+      },
+      "out_of_sample_baseline": -0.0001645226353150311,
+      "verified": false
+    },
+    {
+      "setup": "vix_high",
+      "desc": "VIX (fear index) 10%+ above its 20-day average",
+      "at_open": false,
+      "side": "long",
+      "hold": 0,
+      "hold_name": "sell same day",
+      "in_sample": {
+        "trades": 13695,
+        "days": 414,
+        "win": 0.5002555677254472,
+        "avg": -0.000550624021485655,
+        "t": -1.0118685858808505,
+        "edge": -0.00022278388584185397,
+        "t_edge": -0.409404614995916,
+        "worst": -0.13257546108852875
+      },
+      "in_sample_baseline": -0.0003278401356438011,
+      "out_of_sample": {
+        "trades": 13055,
+        "days": 373,
+        "win": 0.5093833780160858,
+        "avg": 5.4658200118295284e-05,
+        "t": 0.08012533997086436,
+        "edge": 0.00021918083543332639,
+        "t_edge": 0.3213047432258017,
+        "worst": -0.12152501536815857
+      },
+      "out_of_sample_baseline": -0.0001645226353150311,
+      "verified": false
+    },
+    {
+      "setup": "turn_of_month",
+      "desc": "Buy day is the last trading day of the month or one of the first 3",
+      "at_open": false,
+      "side": "long",
+      "hold": 0,
+      "hold_name": "sell same day",
+      "in_sample": {
+        "trades": 14306,
+        "days": 438,
+        "win": 0.486579057738012,
+        "avg": -0.0007064644662033284,
+        "t": -1.753100243613531,
+        "edge": -0.0003786243305595273,
+        "t_edge": -0.939560923296145,
+        "worst": -0.19499980723853289
+      },
+      "in_sample_baseline": -0.0003278401356438011,
+      "out_of_sample": {
+        "trades": 13125,
+        "days": 375,
+        "win": 0.516647619047619,
+        "avg": 0.00039137702939534216,
+        "t": 0.880452548220839,
+        "edge": 0.0005558996647103732,
+        "t_edge": 1.2505672014157891,
+        "worst": -0.1080723243582577
+      },
+      "out_of_sample_baseline": -0.0001645226353150311,
+      "verified": false
+    },
+    {
+      "setup": "gap_down",
+      "desc": "Opens 1%+ below the previous close",
+      "at_open": true,
+      "side": "long",
+      "hold": 0,
+      "hold_name": "sell same day",
+      "in_sample": {
+        "trades": 4107,
+        "days": 955,
+        "win": 0.5093742391039688,
+        "avg": 0.00034668652467087816,
+        "t": 0.5354299740055821,
+        "edge": 0.0006745266603146792,
+        "t_edge": 1.0417531876706905,
+        "worst": -0.1207702506778014
+      },
+      "in_sample_baseline": -0.0003278401356438011,
+      "out_of_sample": {
+        "trades": 5863,
+        "days": 1147,
+        "win": 0.5053726761043834,
+        "avg": 0.00017000358418287024,
+        "t": 0.3076490437398658,
+        "edge": 0.00033452621949790133,
+        "t_edge": 0.605379422022867,
+        "worst": -0.1208373730798194
+      },
+      "out_of_sample_baseline": -0.0001645226353150311,
+      "verified": false
+    },
+    {
+      "setup": "vol_spike",
+      "desc": "Volume more than 2\u00d7 its 20-day average",
+      "at_open": false,
+      "side": "long",
+      "hold": 0,
+      "hold_name": "sell same day",
+      "in_sample": {
+        "trades": 2194,
+        "days": 1044,
+        "win": 0.47675478577939834,
+        "avg": -0.00024816042500167804,
+        "t": -0.38493900390689195,
+        "edge": 7.967971064212304e-05,
+        "t_edge": 0.12359677594024439,
+        "worst": -0.12993764996460594
+      },
+      "in_sample_baseline": -0.0003278401356438011,
+      "out_of_sample": {
+        "trades": 1582,
+        "days": 680,
+        "win": 0.4936788874841972,
+        "avg": -0.0008069245720053833,
+        "t": -1.152779720966416,
+        "edge": -0.0006424019366903521,
+        "t_edge": -0.917741200377337,
+        "worst": -0.1080723243582577
+      },
+      "out_of_sample_baseline": -0.0001645226353150311,
+      "verified": false
+    },
+    {
+      "setup": "high_52w",
+      "desc": "Closed at a 52-week high",
+      "at_open": false,
+      "side": "long",
+      "hold": 0,
+      "hold_name": "sell same day",
+      "in_sample": {
+        "trades": 7561,
+        "days": 1594,
+        "win": 0.4802274831371512,
+        "avg": -0.0001614859328385763,
+        "t": -0.7821762780822632,
+        "edge": 0.00016635420280522478,
+        "t_edge": 0.8057563213484413,
+        "worst": -0.11703575405889816
+      },
+      "in_sample_baseline": -0.0003278401356438011,
+      "out_of_sample": {
+        "trades": 5991,
+        "days": 1330,
+        "win": 0.4732098147220831,
+        "avg": -0.0005176860275437462,
+        "t": -1.8382144546705113,
+        "edge": -0.0003531633922287151,
+        "t_edge": -1.2540227433517832,
+        "worst": -0.1080723243582577
+      },
+      "out_of_sample_baseline": -0.0001645226353150311,
+      "verified": false
+    },
+    {
+      "setup": "rsi2_low+above_200",
+      "desc": "Oversold (RSI 2 < 10) in an uptrend",
+      "at_open": false,
+      "side": "long",
+      "hold": 0,
+      "hold_name": "sell same day",
+      "in_sample": {
+        "trades": 4824,
+        "days": 1262,
+        "win": 0.5089137645107794,
+        "avg": -9.89114064239716e-05,
+        "t": -0.2961199332414815,
+        "edge": 0.00022892872921982947,
+        "t_edge": 0.6853644333299442,
+        "worst": -0.06633904393867024
+      },
+      "in_sample_baseline": -0.0003278401356438011,
+      "out_of_sample": {
+        "trades": 4187,
+        "days": 1098,
+        "win": 0.5053737759732505,
+        "avg": 0.0001855685017515035,
+        "t": 0.4830594426185558,
+        "edge": 0.0003500911370665346,
+        "t_edge": 0.911333701252381,
+        "worst": -0.11768186353591709
+      },
+      "out_of_sample_baseline": -0.0001645226353150311,
+      "verified": false
+    },
+    {
+      "setup": "close_near_low+above_200",
+      "desc": "Closed near the low, in an uptrend",
+      "at_open": false,
+      "side": "long",
+      "hold": 0,
+      "hold_name": "sell same day",
+      "in_sample": {
+        "trades": 5261,
+        "days": 1186,
+        "win": 0.49496293480326936,
+        "avg": -0.00028502475620067135,
+        "t": -0.812492485888009,
+        "edge": 4.2815379443129724e-05,
+        "t_edge": 0.12204965821809163,
+        "worst": -0.13694284547168584
+      },
+      "in_sample_baseline": -0.0003278401356438011,
+      "out_of_sample": {
+        "trades": 4858,
+        "days": 1069,
+        "win": 0.5107039934129272,
+        "avg": -7.507341969090745e-05,
+        "t": -0.2223966253579585,
+        "edge": 8.944921562412364e-05,
+        "t_edge": 0.2649833160341682,
+        "worst": -0.07036304322692027
+      },
+      "out_of_sample_baseline": -0.0001645226353150311,
+      "verified": false
+    },
+    {
+      "setup": "rsi2_low+above_200+vix_high",
+      "desc": "Oversold in an uptrend while fear is elevated",
+      "at_open": false,
+      "side": "long",
+      "hold": 0,
+      "hold_name": "sell same day",
+      "in_sample": {
+        "trades": 2112,
+        "days": 311,
+        "win": 0.49573863636363635,
+        "avg": -0.0009428487516439919,
+        "t": -1.312350379907325,
+        "edge": -0.0006150086160001907,
+        "t_edge": -0.8560299724073688,
+        "worst": -0.06633904393867024
+      },
+      "in_sample_baseline": -0.0003278401356438011,
+      "out_of_sample": {
+        "trades": 1804,
+        "days": 275,
+        "win": 0.5110864745011087,
+        "avg": 0.0002897379863823022,
+        "t": 0.3244251874081482,
+        "edge": 0.0004542606216973333,
+        "t_edge": 0.5086443416219626,
+        "worst": -0.08181094279214102
+      },
+      "out_of_sample_baseline": -0.0001645226353150311,
+      "verified": false
+    },
+    {
+      "setup": "down3+above_200",
+      "desc": "3 down days in an uptrend",
+      "at_open": false,
+      "side": "long",
+      "hold": 0,
+      "hold_name": "sell same day",
+      "in_sample": {
+        "trades": 4587,
+        "days": 1308,
+        "win": 0.5212557226945717,
+        "avg": 0.00030294911564405873,
+        "t": 0.9463197254565304,
+        "edge": 0.0006307892512878598,
+        "t_edge": 1.9703913306715226,
+        "worst": -0.08690002835181448
+      },
+      "in_sample_baseline": -0.0003278401356438011,
+      "out_of_sample": {
+        "trades": 4033,
+        "days": 1145,
+        "win": 0.5102901066203819,
+        "avg": 0.000335298711063252,
+        "t": 0.8923753418642768,
+        "edge": 0.0004998213463782831,
+        "t_edge": 1.330241453750304,
+        "worst": -0.07456275467671963
+      },
+      "out_of_sample_baseline": -0.0001645226353150311,
+      "verified": false
+    },
+    {
+      "setup": "turn_of_month+above_200",
+      "desc": "Turn of the month, in an uptrend",
+      "at_open": false,
+      "side": "long",
+      "hold": 0,
+      "hold_name": "sell same day",
+      "in_sample": {
+        "trades": 11205,
+        "days": 432,
+        "win": 0.48058902275769744,
+        "avg": -0.0005252017200855859,
+        "t": -1.4998580721427153,
+        "edge": -0.0001973615844417848,
+        "t_edge": -0.5636203276479161,
+        "worst": -0.08690002835181448
+      },
+      "in_sample_baseline": -0.0003278401356438011,
+      "out_of_sample": {
+        "trades": 9607,
+        "days": 375,
+        "win": 0.5092120328926825,
+        "avg": 0.0002688661457607154,
+        "t": 0.6310097671114906,
+        "edge": 0.00043338878107574644,
+        "t_edge": 1.017132718742224,
+        "worst": -0.1080723243582577
+      },
+      "out_of_sample_baseline": -0.0001645226353150311,
+      "verified": false
+    },
+    {
+      "setup": "gap_down+above_200",
+      "desc": "Gaps down 1%+ at the open, in an uptrend",
+      "at_open": true,
+      "side": "long",
+      "hold": 0,
+      "hold_name": "sell same day",
+      "in_sample": {
+        "trades": 2507,
+        "days": 777,
+        "win": 0.5157558835261269,
+        "avg": 0.0006780250333002489,
+        "t": 1.064881145039345,
+        "edge": 0.00100586516894405,
+        "t_edge": 1.579774787439166,
+        "worst": -0.08268648631857617
+      },
+      "in_sample_baseline": -0.0003278401356438011,
+      "out_of_sample": {
+        "trades": 3565,
+        "days": 962,
+        "win": 0.5136044880785414,
+        "avg": -5.2161592238443986e-05,
+        "t": -0.08976673880617587,
+        "edge": 0.0001123610430765871,
+        "t_edge": 0.19336611428076206,
+        "worst": -0.11768186353591709
+      },
+      "out_of_sample_baseline": -0.0001645226353150311,
+      "verified": false
+    },
+    {
+      "setup": "rsi2_high",
+      "desc": "RSI(2) above 90: sharply overbought over the last 2 days",
+      "at_open": false,
+      "side": "short",
+      "hold": 0,
+      "hold_name": "sell same day",
+      "in_sample": {
+        "trades": 12876,
+        "days": 1810,
+        "win": 0.4461789375582479,
+        "avg": -0.00048494382683919276,
+        "t": -2.374590302023404,
+        "edge": 0.0001872160375170069,
+        "t_edge": 0.9167275929023235,
+        "worst": -0.11014407951711341
+      },
+      "in_sample_baseline": -0.0006721598643561997,
+      "out_of_sample": {
+        "trades": 11541,
+        "days": 1630,
+        "win": 0.47179620483493634,
+        "avg": -0.0004605806655276541,
+        "t": -1.8083080359680204,
+        "edge": 0.0003748966991573156,
+        "t_edge": 1.4719000698116693,
+        "worst": -0.15830255905040308
+      },
+      "out_of_sample_baseline": -0.0008354773646849697,
+      "verified": false
+    },
+    {
+      "setup": "up3",
+      "desc": "Closed higher 3 days in a row",
+      "at_open": false,
+      "side": "short",
+      "hold": 0,
+      "hold_name": "sell same day",
+      "in_sample": {
+        "trades": 10598,
+        "days": 1748,
+        "win": 0.4501792791092659,
+        "avg": -0.0004534454009189231,
+        "t": -2.0465626971499495,
+        "edge": 0.00021871446343727657,
+        "t_edge": 0.9871372855271958,
+        "worst": -0.0978912943964419
+      },
+      "in_sample_baseline": -0.0006721598643561997,
+      "out_of_sample": {
+        "trades": 10266,
+        "days": 1580,
+        "win": 0.4600623417105007,
+        "avg": -0.000608860575575626,
+        "t": -2.2963454321834913,
+        "edge": 0.00022661678910934364,
+        "t_edge": 0.8546955565900219,
+        "worst": -0.15830255905040308
+      },
+      "out_of_sample_baseline": -0.0008354773646849697,
+      "verified": false
+    },
+    {
+      "setup": "big_rise",
+      "desc": "Rose more than 2\u00d7 its normal daily move",
+      "at_open": false,
+      "side": "short",
+      "hold": 0,
+      "hold_name": "sell same day",
+      "in_sample": {
+        "trades": 2679,
+        "days": 931,
+        "win": 0.47555057857409483,
+        "avg": -0.00035681286053253875,
+        "t": -0.7988311142751101,
+        "edge": 0.0003153470038236609,
+        "t_edge": 0.705997530671404,
+        "worst": -0.11014407951711341
+      },
+      "in_sample_baseline": -0.0006721598643561997,
+      "out_of_sample": {
+        "trades": 2225,
+        "days": 786,
+        "win": 0.47775280898876404,
+        "avg": -0.0004700183169112729,
+        "t": -0.9295339741864174,
+        "edge": 0.0003654590477736968,
+        "t_edge": 0.7227518351026219,
+        "worst": -0.10264299964213192
+      },
+      "out_of_sample_baseline": -0.0008354773646849697,
+      "verified": false
+    },
+    {
+      "setup": "close_near_high",
+      "desc": "Closed in the top 10% of the day's range",
+      "at_open": false,
+      "side": "short",
+      "hold": 0,
+      "hold_name": "sell same day",
+      "in_sample": {
+        "trades": 10864,
+        "days": 1601,
+        "win": 0.4629970544918999,
+        "avg": -0.00026018472938464123,
+        "t": -0.9785794026369923,
+        "edge": 0.0004119751349715584,
+        "t_edge": 1.5494774902249124,
+        "worst": -0.11521555932635247
+      },
+      "in_sample_baseline": -0.0006721598643561997,
+      "out_of_sample": {
+        "trades": 9771,
+        "days": 1427,
+        "win": 0.45194964691433837,
+        "avg": -0.0002828719683895264,
+        "t": -0.954057703271224,
+        "edge": 0.0005526053962954433,
+        "t_edge": 1.8638023350511526,
+        "worst": -0.09866929948937325
+      },
+      "out_of_sample_baseline": -0.0008354773646849697,
+      "verified": false
+    },
+    {
+      "setup": "below_200",
+      "desc": "Price below its 200-day average (downtrend)",
+      "at_open": false,
+      "side": "short",
+      "hold": 0,
+      "hold_name": "sell same day",
+      "in_sample": {
+        "trades": 15338,
+        "days": 2182,
+        "win": 0.45749119833094276,
+        "avg": -0.0008124132904356518,
+        "t": -3.6610939892753103,
+        "edge": -0.00014025342607945212,
+        "t_edge": -0.632044036255734,
+        "worst": -0.1356373314842359
+      },
+      "in_sample_baseline": -0.0006721598643561997,
+      "out_of_sample": {
+        "trades": 18142,
+        "days": 1821,
+        "win": 0.45535222136478887,
+        "avg": -0.0011502078244841043,
+        "t": -4.420338723064184,
+        "edge": -0.0003147304597991347,
+        "t_edge": -1.2095337982958894,
+        "worst": -0.21194692353641537
+      },
+      "out_of_sample_baseline": -0.0008354773646849697,
+      "verified": false
+    },
+    {
+      "setup": "gap_up",
+      "desc": "Opens 1%+ above the previous close",
+      "at_open": true,
+      "side": "short",
+      "hold": 0,
+      "hold_name": "sell same day",
+      "in_sample": {
+        "trades": 4700,
+        "days": 1244,
+        "win": 0.4491489361702128,
+        "avg": 7.545173100237501e-05,
+        "t": 0.12831348136648793,
+        "edge": 0.0007476115953585746,
+        "t_edge": 1.2713909308110267,
+        "worst": -0.11521555932635247
+      },
+      "in_sample_baseline": -0.0006721598643561997,
+      "out_of_sample": {
+        "trades": 6611,
+        "days": 1333,
+        "win": 0.45575555891695657,
+        "avg": -0.0006798185467822154,
+        "t": -1.359019365958033,
+        "edge": 0.00015565881790275424,
+        "t_edge": 0.3111761940201189,
+        "worst": -0.21194692353641537
+      },
+      "out_of_sample_baseline": -0.0008354773646849697,
+      "verified": false
+    },
+    {
+      "setup": "low_52w",
+      "desc": "Closed at a 52-week low",
+      "at_open": false,
+      "side": "short",
+      "hold": 0,
+      "hold_name": "sell same day",
+      "in_sample": {
+        "trades": 449,
+        "days": 223,
+        "win": 0.5167037861915368,
+        "avg": -0.0005541810539121346,
+        "t": -0.37552839850388836,
+        "edge": 0.00011797881044406508,
+        "t_edge": 0.07994570263760414,
+        "worst": -0.1125393733891718
+      },
+      "in_sample_baseline": -0.0006721598643561997,
+      "out_of_sample": {
+        "trades": 679,
+        "days": 252,
+        "win": 0.43446244477172313,
+        "avg": -0.0005426514868568409,
+        "t": -0.3560689707552931,
+        "edge": 0.0002928258778281288,
+        "t_edge": 0.19214212335934117,
+        "worst": -0.1604260179921549
+      },
+      "out_of_sample_baseline": -0.0008354773646849697,
+      "verified": false
+    },
+    {
+      "setup": "rsi2_high+below_200",
+      "desc": "Overbought (RSI 2 > 90) in a downtrend",
+      "at_open": false,
+      "side": "short",
+      "hold": 0,
+      "hold_name": "sell same day",
+      "in_sample": {
+        "trades": 1340,
+        "days": 619,
+        "win": 0.4626865671641791,
+        "avg": -0.0004918541857471166,
+        "t": -0.9715317719286054,
+        "edge": 0.00018030567860908306,
+        "t_edge": 0.35614761550069624,
+        "worst": -0.0978912943964419
+      },
+      "in_sample_baseline": -0.0006721598643561997,
+      "out_of_sample": {
+        "trades": 1762,
+        "days": 632,
+        "win": 0.4750283768444949,
+        "avg": 0.00012938092123058163,
+        "t": 0.2454291818241692,
+        "edge": 0.0009648582859155513,
+        "t_edge": 1.8302882483460852,
+        "worst": -0.09574103871371858
+      },
+      "out_of_sample_baseline": -0.0008354773646849697,
+      "verified": false
+    },
+    {
+      "setup": "up3+below_200",
+      "desc": "3 up days in a downtrend",
+      "at_open": false,
+      "side": "short",
+      "hold": 0,
+      "hold_name": "sell same day",
+      "in_sample": {
+        "trades": 1343,
+        "days": 610,
+        "win": 0.4959046909903202,
+        "avg": -0.0001101180857335948,
+        "t": -0.2081209441383642,
+        "edge": 0.0005620417786226049,
+        "t_edge": 1.0622475393835875,
+        "worst": -0.0978912943964419
+      },
+      "in_sample_baseline": -0.0006721598643561997,
+      "out_of_sample": {
+        "trades": 1843,
+        "days": 659,
+        "win": 0.4481823114487249,
+        "avg": -0.0006067933640093133,
+        "t": -1.1097668794132902,
+        "edge": 0.0002286840006756564,
+        "t_edge": 0.41824110950177557,
+        "worst": -0.09574103871371858
+      },
+      "out_of_sample_baseline": -0.0008354773646849697,
+      "verified": false
+    },
+    {
+      "setup": "close_near_high+below_200",
+      "desc": "Closed near the high, in a downtrend",
+      "at_open": false,
+      "side": "short",
+      "hold": 0,
+      "hold_name": "sell same day",
+      "in_sample": {
+        "trades": 2019,
+        "days": 659,
+        "win": 0.4640911342248638,
+        "avg": -0.0006419257875394807,
+        "t": -1.1784404447168118,
+        "edge": 3.023407681671897e-05,
+        "t_edge": 0.055503392481027626,
+        "worst": -0.11521555932635247
+      },
+      "in_sample_baseline": -0.0006721598643561997,
+      "out_of_sample": {
+        "trades": 2320,
+        "days": 670,
+        "win": 0.46206896551724136,
+        "avg": -0.0012257067821777941,
+        "t": -2.4350874385532455,
+        "edge": -0.00039022941749282446,
+        "t_edge": -0.7752610710062059,
+        "worst": -0.09866929948937325
+      },
+      "out_of_sample_baseline": -0.0008354773646849697,
+      "verified": false
+    },
+    {
+      "setup": "gap_up+below_200",
+      "desc": "Gaps up 1%+ at the open, in a downtrend",
+      "at_open": true,
+      "side": "short",
+      "hold": 0,
+      "hold_name": "sell same day",
+      "in_sample": {
+        "trades": 1827,
+        "days": 528,
+        "win": 0.4351395730706076,
+        "avg": -0.0007468411122772058,
+        "t": -0.856387658671089,
+        "edge": -7.468124792100615e-05,
+        "t_edge": -0.08563548257097948,
+        "worst": -0.11521555932635247
+      },
+      "in_sample_baseline": -0.0006721598643561997,
+      "out_of_sample": {
+        "trades": 2618,
+        "days": 647,
+        "win": 0.43506493506493504,
+        "avg": -0.001273071734432618,
+        "t": -1.6069452001756628,
+        "edge": -0.0004375943697476483,
+        "t_edge": -0.5523570691821817,
+        "worst": -0.21194692353641537
+      },
+      "out_of_sample_baseline": -0.0008354773646849697,
+      "verified": false
+    },
+    {
+      "setup": "big_drop+below_200",
+      "desc": "Big drop in a downtrend (keeps falling?)",
+      "at_open": false,
+      "side": "short",
+      "hold": 0,
+      "hold_name": "sell same day",
+      "in_sample": {
+        "trades": 749,
+        "days": 330,
+        "win": 0.46862483311081443,
+        "avg": 0.000588909779544656,
+        "t": 0.5412234426994685,
+        "edge": 0.0012610696439008557,
+        "t_edge": 1.158955884012552,
+        "worst": -0.08746660995483407
+      },
+      "in_sample_baseline": -0.0006721598643561997,
+      "out_of_sample": {
+        "trades": 853,
+        "days": 339,
+        "win": 0.44431418522860494,
+        "avg": -0.0006799748353610873,
+        "t": -0.6896044636457723,
+        "edge": 0.00015550252932388232,
+        "t_edge": 0.1577047160473397,
+        "worst": -0.1604260179921549
+      },
+      "out_of_sample_baseline": -0.0008354773646849697,
+      "verified": false
+    },
+    {
+      "setup": "down3+below_200",
+      "desc": "3 down days in a downtrend (keeps falling?)",
+      "at_open": false,
+      "side": "short",
+      "hold": 0,
+      "hold_name": "sell same day",
+      "in_sample": {
+        "trades": 2304,
+        "days": 816,
+        "win": 0.4813368055555556,
+        "avg": -0.0011068367152208877,
+        "t": -2.422692512471758,
+        "edge": -0.000434676850864688,
+        "t_edge": -0.9514396635501212,
+        "worst": -0.1202916817575424
+      },
+      "in_sample_baseline": -0.0006721598643561997,
+      "out_of_sample": {
+        "trades": 2601,
+        "days": 849,
+        "win": 0.45674740484429066,
+        "avg": -0.0017870275286895622,
+        "t": -3.2301538646554735,
+        "edge": -0.0009515501640045926,
+        "t_edge": -1.7199810245379445,
+        "worst": -0.21194692353641537
+      },
+      "out_of_sample_baseline": -0.0008354773646849697,
+      "verified": false
+    },
+    {
+      "setup": "rsi2_low",
+      "desc": "RSI(2) below 10: sharply oversold over the last 2 days",
+      "at_open": false,
+      "side": "long",
+      "hold": 1,
+      "hold_name": "sell next day",
+      "in_sample": {
+        "trades": 7800,
+        "days": 1522,
+        "win": 0.5323076923076923,
+        "avg": 0.001291441148873738,
+        "t": 2.6903375151768016,
+        "edge": 0.0009806442788302212,
+        "t_edge": 2.042883715360368,
+        "worst": -0.30006503888154495
+      },
+      "in_sample_baseline": 0.0003107968700435168,
+      "out_of_sample": {
+        "trades": 7157,
+        "days": 1387,
+        "win": 0.5296912114014252,
+        "avg": 0.0015865638781384216,
+        "t": 2.7451590745931833,
+        "edge": 0.0009060138848874016,
+        "t_edge": 1.567634478559003,
+        "worst": -0.25248321776884647
+      },
+      "out_of_sample_baseline": 0.00068054999325102,
+      "verified": false
+    },
+    {
+      "setup": "down3",
+      "desc": "Closed lower 3 days in a row",
+      "at_open": false,
+      "side": "long",
+      "hold": 1,
+      "hold_name": "sell next day",
+      "in_sample": {
+        "trades": 6979,
+        "days": 1519,
+        "win": 0.5347470984381717,
+        "avg": 0.0014926775123963905,
+        "t": 3.22981822058627,
+        "edge": 0.0011818806423528738,
+        "t_edge": 2.5573237363917745,
+        "worst": -0.21050002861023637
+      },
+      "in_sample_baseline": 0.0003107968700435168,
+      "out_of_sample": {
+        "trades": 6633,
+        "days": 1419,
+        "win": 0.5333936378712498,
+        "avg": 0.0017013276813072212,
+        "t": 2.8805733851581614,
+        "edge": 0.0010207776880562013,
+        "t_edge": 1.7283119957930075,
+        "worst": -0.18322964620893661
+      },
+      "out_of_sample_baseline": 0.00068054999325102,
+      "verified": false
+    },
+    {
+      "setup": "big_drop",
+      "desc": "Fell more than 2\u00d7 its normal daily move",
+      "at_open": false,
+      "side": "long",
+      "hold": 1,
+      "hold_name": "sell next day",
+      "in_sample": {
+        "trades": 2684,
+        "days": 773,
+        "win": 0.5156482861400894,
+        "avg": -0.0006241443200228714,
+        "t": -0.7989156866326611,
+        "edge": -0.0009349411900663881,
+        "t_edge": -1.196741136402034,
+        "worst": -0.2747474630231334
+      },
+      "in_sample_baseline": 0.0003107968700435168,
+      "out_of_sample": {
+        "trades": 2400,
+        "days": 674,
+        "win": 0.49541666666666667,
+        "avg": 0.0005196634039081803,
+        "t": 0.587906167563198,
+        "edge": -0.00016088658934283967,
+        "t_edge": -0.18201439131853017,
+        "worst": -0.17956410782586446
+      },
+      "out_of_sample_baseline": 0.00068054999325102,
+      "verified": false
+    },
+    {
+      "setup": "close_near_low",
+      "desc": "Closed in the bottom 10% of the day's range",
+      "at_open": false,
+      "side": "long",
+      "hold": 1,
+      "hold_name": "sell next day",
+      "in_sample": {
+        "trades": 7620,
+        "days": 1391,
+        "win": 0.523753280839895,
+        "avg": 0.0007554937255012691,
+        "t": 1.5602231535196807,
+        "edge": 0.0004446968554577523,
+        "t_edge": 0.9183747088332561,
+        "worst": -0.2747474630231334
+      },
+      "in_sample_baseline": 0.0003107968700435168,
+      "out_of_sample": {
+        "trades": 7264,
+        "days": 1241,
+        "win": 0.5509361233480177,
+        "avg": 0.0005906674713670887,
+        "t": 1.0449692029946585,
+        "edge": -8.988252188393126e-05,
+        "t_edge": -0.159014118449447,
+        "worst": -0.17956410782586446
+      },
+      "out_of_sample_baseline": 0.00068054999325102,
+      "verified": false
+    },
+    {
+      "setup": "above_200",
+      "desc": "Price above its 200-day average (uptrend)",
+      "at_open": false,
+      "side": "long",
+      "hold": 1,
+      "hold_name": "sell next day",
+      "in_sample": {
+        "trades": 58773,
+        "days": 2264,
+        "win": 0.5225188436867269,
+        "avg": 0.000264140776341792,
+        "t": 1.1016616310958882,
+        "edge": -4.665609370172477e-05,
+        "t_edge": -0.19459028249956875,
+        "worst": -0.20028962996132454
+      },
+      "in_sample_baseline": 0.0003107968700435168,
+      "out_of_sample": {
+        "trades": 50300,
+        "days": 1957,
+        "win": 0.5194831013916501,
+        "avg": 0.0004935798094140578,
+        "t": 1.504963816023013,
+        "edge": -0.0001869701838369622,
+        "t_edge": -0.5700868552217258,
+        "worst": -0.25248321776884647
+      },
+      "out_of_sample_baseline": 0.00068054999325102,
+      "verified": false
+    },
+    {
+      "setup": "vix_high",
+      "desc": "VIX (fear index) 10%+ above its 20-day average",
+      "at_open": false,
+      "side": "long",
+      "hold": 1,
+      "hold_name": "sell next day",
+      "in_sample": {
+        "trades": 13695,
+        "days": 414,
+        "win": 0.5261774370208105,
+        "avg": 0.00015169132035755152,
+        "t": 0.18532456141474235,
+        "edge": -0.00015910554968596527,
+        "t_edge": -0.19438268547403495,
+        "worst": -0.2747474630231334
+      },
+      "in_sample_baseline": 0.0003107968700435168,
+      "out_of_sample": {
+        "trades": 13055,
+        "days": 373,
+        "win": 0.5273841440061279,
+        "avg": 0.0006286664593929417,
+        "t": 0.6005537612310056,
+        "edge": -5.188353385807826e-05,
+        "t_edge": -0.049563406698224365,
+        "worst": -0.25248321776884647
+      },
+      "out_of_sample_baseline": 0.00068054999325102,
+      "verified": false
+    },
+    {
+      "setup": "turn_of_month",
+      "desc": "Buy day is the last trading day of the month or one of the first 3",
+      "at_open": false,
+      "side": "long",
+      "hold": 1,
+      "hold_name": "sell next day",
+      "in_sample": {
+        "trades": 14306,
+        "days": 438,
+        "win": 0.5243254578498532,
+        "avg": -3.756235306533381e-06,
+        "t": -0.0053972358295634945,
+        "edge": -0.00031455310535005016,
+        "t_edge": -0.4519730932571873,
+        "worst": -0.30006503888154495
+      },
+      "in_sample_baseline": 0.0003107968700435168,
+      "out_of_sample": {
+        "trades": 13090,
+        "days": 374,
+        "win": 0.544996180290298,
+        "avg": 0.0017849398666097466,
+        "t": 2.490275728389472,
+        "edge": 0.0011043898733587266,
+        "t_edge": 1.540799971893766,
+        "worst": -0.2752241328185256
+      },
+      "out_of_sample_baseline": 0.00068054999325102,
+      "verified": false
+    },
+    {
+      "setup": "gap_down",
+      "desc": "Opens 1%+ below the previous close",
+      "at_open": true,
+      "side": "long",
+      "hold": 1,
+      "hold_name": "sell next day",
+      "in_sample": {
+        "trades": 4107,
+        "days": 955,
+        "win": 0.5079133187241295,
+        "avg": -0.0006250819595154923,
+        "t": -0.6492972704057837,
+        "edge": -0.0009358788295590092,
+        "t_edge": -0.9721342301003708,
+        "worst": -0.18316174194279095
+      },
+      "in_sample_baseline": 0.0003107968700435168,
+      "out_of_sample": {
+        "trades": 5862,
+        "days": 1146,
+        "win": 0.5269532582736267,
+        "avg": 0.0004454602574537625,
+        "t": 0.4985426494997896,
+        "edge": -0.00023508973579725744,
+        "t_edge": -0.2631037399935403,
+        "worst": -0.25672712917256096
+      },
+      "out_of_sample_baseline": 0.00068054999325102,
+      "verified": false
+    },
+    {
+      "setup": "vol_spike",
+      "desc": "Volume more than 2\u00d7 its 20-day average",
+      "at_open": false,
+      "side": "long",
+      "hold": 1,
+      "hold_name": "sell next day",
+      "in_sample": {
+        "trades": 2194,
+        "days": 1044,
+        "win": 0.5173199635369189,
+        "avg": 0.0007407462583793791,
+        "t": 0.86417197300152,
+        "edge": 0.00042994938833586233,
+        "t_edge": 0.5015890488895408,
+        "worst": -0.13369523495629404
+      },
+      "in_sample_baseline": 0.0003107968700435168,
+      "out_of_sample": {
+        "trades": 1581,
+        "days": 679,
+        "win": 0.534471853257432,
+        "avg": 0.0003455113203869441,
+        "t": 0.34073146314890734,
+        "edge": -0.0003350386728640759,
+        "t_edge": -0.3304036958574814,
+        "worst": -0.168696621333086
+      },
+      "out_of_sample_baseline": 0.00068054999325102,
+      "verified": false
+    },
+    {
+      "setup": "high_52w",
+      "desc": "Closed at a 52-week high",
+      "at_open": false,
+      "side": "long",
+      "hold": 1,
+      "hold_name": "sell next day",
+      "in_sample": {
+        "trades": 7561,
+        "days": 1594,
+        "win": 0.5119693162280121,
+        "avg": 0.0003711924580430346,
+        "t": 1.1499379038506312,
+        "edge": 6.039558799951782e-05,
+        "t_edge": 0.1871028744283914,
+        "worst": -0.18342231659046543
+      },
+      "in_sample_baseline": 0.0003107968700435168,
+      "out_of_sample": {
+        "trades": 5988,
+        "days": 1329,
+        "win": 0.49365397461589844,
+        "avg": 0.0004605300691871448,
+        "t": 0.9466577070764581,
+        "edge": -0.00022001992406387518,
+        "t_edge": -0.452269180149461,
+        "worst": -0.16841246156075457
+      },
+      "out_of_sample_baseline": 0.00068054999325102,
+      "verified": false
+    },
+    {
+      "setup": "rsi2_low+above_200",
+      "desc": "Oversold (RSI 2 < 10) in an uptrend",
+      "at_open": false,
+      "side": "long",
+      "hold": 1,
+      "hold_name": "sell next day",
+      "in_sample": {
+        "trades": 4824,
+        "days": 1262,
+        "win": 0.5466417910447762,
+        "avg": 0.0005569729739664947,
+        "t": 1.1941931450611263,
+        "edge": 0.0002461761039229779,
+        "t_edge": 0.5278206116341301,
+        "worst": -0.10406508728645375
+      },
+      "in_sample_baseline": 0.0003107968700435168,
+      "out_of_sample": {
+        "trades": 4184,
+        "days": 1097,
+        "win": 0.5234225621414914,
+        "avg": 0.0013941285575154805,
+        "t": 2.2167317903351784,
+        "edge": 0.0007135785642644605,
+        "t_edge": 1.1346244073256488,
+        "worst": -0.25248321776884647
+      },
+      "out_of_sample_baseline": 0.00068054999325102,
+      "verified": false
+    },
+    {
+      "setup": "close_near_low+above_200",
+      "desc": "Closed near the low, in an uptrend",
+      "at_open": false,
+      "side": "long",
+      "hold": 1,
+      "hold_name": "sell next day",
+      "in_sample": {
+        "trades": 5261,
+        "days": 1186,
+        "win": 0.5056072989925869,
+        "avg": 0.0004385904744546162,
+        "t": 0.9045791745610502,
+        "edge": 0.00012779360441109942,
+        "t_edge": 0.26357032340048125,
+        "worst": -0.14861102745307403
+      },
+      "in_sample_baseline": 0.0003107968700435168,
+      "out_of_sample": {
+        "trades": 4852,
+        "days": 1068,
+        "win": 0.5465787304204451,
+        "avg": 0.0006374633256545722,
+        "t": 1.0510740129063136,
+        "edge": -4.3086667596447755e-05,
+        "t_edge": -0.07104295226216509,
+        "worst": -0.17956410782586446
+      },
+      "out_of_sample_baseline": 0.00068054999325102,
+      "verified": false
+    },
+    {
+      "setup": "rsi2_low+above_200+vix_high",
+      "desc": "Oversold in an uptrend while fear is elevated",
+      "at_open": false,
+      "side": "long",
+      "hold": 1,
+      "hold_name": "sell next day",
+      "in_sample": {
+        "trades": 2112,
+        "days": 311,
+        "win": 0.5549242424242424,
+        "avg": 6.943166823696302e-06,
+        "t": 0.0063666206218488085,
+        "edge": -0.00030385370321982046,
+        "t_edge": -0.27862232063071246,
+        "worst": -0.10406508728645375
+      },
+      "in_sample_baseline": 0.0003107968700435168,
+      "out_of_sample": {
+        "trades": 1804,
+        "days": 275,
+        "win": 0.5199556541019955,
+        "avg": 0.0011122397379883739,
+        "t": 0.6672268391490995,
+        "edge": 0.0004316897447373539,
+        "t_edge": 0.2589684346246556,
+        "worst": -0.25248321776884647
+      },
+      "out_of_sample_baseline": 0.00068054999325102,
+      "verified": false
+    },
+    {
+      "setup": "down3+above_200",
+      "desc": "3 down days in an uptrend",
+      "at_open": false,
+      "side": "long",
+      "hold": 1,
+      "hold_name": "sell next day",
+      "in_sample": {
+        "trades": 4587,
+        "days": 1308,
+        "win": 0.5437104861565293,
+        "avg": 0.0013297042187331099,
+        "t": 2.960614211004189,
+        "edge": 0.0010189073486895931,
+        "t_edge": 2.2686184895322814,
+        "worst": -0.10051509762889005
+      },
+      "in_sample_baseline": 0.0003107968700435168,
+      "out_of_sample": {
+        "trades": 4031,
+        "days": 1144,
+        "win": 0.5333664103200199,
+        "avg": 0.001395046379341957,
+        "t": 2.3076845445410705,
+        "edge": 0.000714496386090937,
+        "t_edge": 1.1819193194782946,
+        "worst": -0.1807338855112422
+      },
+      "out_of_sample_baseline": 0.00068054999325102,
+      "verified": false
+    },
+    {
+      "setup": "turn_of_month+above_200",
+      "desc": "Turn of the month, in an uptrend",
+      "at_open": false,
+      "side": "long",
+      "hold": 1,
+      "hold_name": "sell next day",
+      "in_sample": {
+        "trades": 11205,
+        "days": 432,
+        "win": 0.5168228469433289,
+        "avg": 0.00013712020332677077,
+        "t": 0.2366938453938629,
+        "edge": -0.00017367666671674602,
+        "t_edge": -0.29979679947243154,
+        "worst": -0.1607222124735514
+      },
+      "in_sample_baseline": 0.0003107968700435168,
+      "out_of_sample": {
+        "trades": 9583,
+        "days": 374,
+        "win": 0.5340707502869665,
+        "avg": 0.0017009564087836066,
+        "t": 2.3608093657473015,
+        "edge": 0.0010204064155325866,
+        "t_edge": 1.4162532386004436,
+        "worst": -0.18042497957081344
+      },
+      "out_of_sample_baseline": 0.00068054999325102,
+      "verified": false
+    },
+    {
+      "setup": "gap_down+above_200",
+      "desc": "Gaps down 1%+ at the open, in an uptrend",
+      "at_open": true,
+      "side": "long",
+      "hold": 1,
+      "hold_name": "sell next day",
+      "in_sample": {
+        "trades": 2507,
+        "days": 777,
+        "win": 0.4946150777822098,
+        "avg": -0.00014021563107474125,
+        "t": -0.14982325617203895,
+        "edge": -0.00045101250111825804,
+        "t_edge": -0.4819160387033723,
+        "worst": -0.1432641708613724
+      },
+      "in_sample_baseline": 0.0003107968700435168,
+      "out_of_sample": {
+        "trades": 3565,
+        "days": 962,
+        "win": 0.5352033660589061,
+        "avg": 0.00015021266492038036,
+        "t": 0.16218881868632312,
+        "edge": -0.0005303373283306397,
+        "t_edge": -0.5726200572554846,
+        "worst": -0.1807338855112422
+      },
+      "out_of_sample_baseline": 0.00068054999325102,
+      "verified": false
+    },
+    {
+      "setup": "rsi2_high",
+      "desc": "RSI(2) above 90: sharply overbought over the last 2 days",
+      "at_open": false,
+      "side": "short",
+      "hold": 1,
+      "hold_name": "sell next day",
+      "in_sample": {
+        "trades": 12876,
+        "days": 1810,
+        "win": 0.4421404162783473,
+        "avg": -0.000739290748527958,
+        "t": -2.3018770995392623,
+        "edge": 0.0005715061215155596,
+        "t_edge": 1.7794580224121654,
+        "worst": -0.2610886868406797
+      },
+      "in_sample_baseline": -0.0013107968700435176,
+      "out_of_sample": {
+        "trades": 11533,
+        "days": 1629,
+        "win": 0.4652735628197347,
+        "avg": -0.0011680975657043678,
+        "t": -2.8762567302319084,
+        "edge": 0.0005124524275466531,
+        "t_edge": 1.2618335890169803,
+        "worst": -0.31721837280502313
+      },
+      "out_of_sample_baseline": -0.0016805499932510209,
+      "verified": false
+    },
+    {
+      "setup": "up3",
+      "desc": "Closed higher 3 days in a row",
+      "at_open": false,
+      "side": "short",
+      "hold": 1,
+      "hold_name": "sell next day",
+      "in_sample": {
+        "trades": 10598,
+        "days": 1748,
+        "win": 0.4407435365163238,
+        "avg": -0.0009933896624478612,
+        "t": -3.157799917475694,
+        "edge": 0.0003174072075956564,
+        "t_edge": 1.0089781400401487,
+        "worst": -0.1514749922978716
+      },
+      "in_sample_baseline": -0.0013107968700435176,
+      "out_of_sample": {
+        "trades": 10264,
+        "days": 1579,
+        "win": 0.4544037412314887,
+        "avg": -0.0012889912690110035,
+        "t": -2.880099466721345,
+        "edge": 0.0003915587242400173,
+        "t_edge": 0.8748919406870995,
+        "worst": -0.31721837280502313
+      },
+      "out_of_sample_baseline": -0.0016805499932510209,
+      "verified": false
+    },
+    {
+      "setup": "big_rise",
+      "desc": "Rose more than 2\u00d7 its normal daily move",
+      "at_open": false,
+      "side": "short",
+      "hold": 1,
+      "hold_name": "sell next day",
+      "in_sample": {
+        "trades": 2679,
+        "days": 931,
+        "win": 0.43561030235162373,
+        "avg": -0.0012733461788190215,
+        "t": -1.9009886559760054,
+        "edge": 3.7450691224496114e-05,
+        "t_edge": 0.05591043532423859,
+        "worst": -0.2610886868406797
+      },
+      "in_sample_baseline": -0.0013107968700435176,
+      "out_of_sample": {
+        "trades": 2222,
+        "days": 785,
+        "win": 0.46804680468046805,
+        "avg": -0.000624293075967588,
+        "t": -0.7105565149594346,
+        "edge": 0.001056256917283433,
+        "t_edge": 1.2022081662262067,
+        "worst": -0.24296945431603417
+      },
+      "out_of_sample_baseline": -0.0016805499932510209,
+      "verified": false
+    },
+    {
+      "setup": "close_near_high",
+      "desc": "Closed in the top 10% of the day's range",
+      "at_open": false,
+      "side": "short",
+      "hold": 1,
+      "hold_name": "sell next day",
+      "in_sample": {
+        "trades": 10864,
+        "days": 1601,
+        "win": 0.4427466863033873,
+        "avg": -0.0006438186661214901,
+        "t": -1.543943644667494,
+        "edge": 0.0006669782039220275,
+        "t_edge": 1.5994826078603206,
+        "worst": -0.1919686363440452
+      },
+      "in_sample_baseline": -0.0013107968700435176,
+      "out_of_sample": {
+        "trades": 9766,
+        "days": 1426,
+        "win": 0.4510546795003072,
+        "avg": -0.000602965524485051,
+        "t": -1.2695148753613097,
+        "edge": 0.00107758446876597,
+        "t_edge": 2.2688022067680085,
+        "worst": -0.20015000289532586
+      },
+      "out_of_sample_baseline": -0.0016805499932510209,
+      "verified": false
+    },
+    {
+      "setup": "below_200",
+      "desc": "Price below its 200-day average (downtrend)",
+      "at_open": false,
+      "side": "short",
+      "hold": 1,
+      "hold_name": "sell next day",
+      "in_sample": {
+        "trades": 15338,
+        "days": 2182,
+        "win": 0.4450384665536576,
+        "avg": -0.0016676314420836099,
+        "t": -4.884614549989401,
+        "edge": -0.00035683457204009226,
+        "t_edge": -1.0451945786944974,
+        "worst": -0.20993112181463874
+      },
+      "in_sample_baseline": -0.0013107968700435176,
+      "out_of_sample": {
+        "trades": 18131,
+        "days": 1820,
+        "win": 0.4461971209530638,
+        "avg": -0.0022176198982658043,
+        "t": -5.190858179089171,
+        "edge": -0.0005370699050147834,
+        "t_edge": -1.257137758985999,
+        "worst": -0.2757143542149321
+      },
+      "out_of_sample_baseline": -0.0016805499932510209,
+      "verified": false
+    },
+    {
+      "setup": "gap_up",
+      "desc": "Opens 1%+ above the previous close",
+      "at_open": true,
+      "side": "short",
+      "hold": 1,
+      "hold_name": "sell next day",
+      "in_sample": {
+        "trades": 4700,
+        "days": 1244,
+        "win": 0.43957446808510636,
+        "avg": 1.1121438117945337e-05,
+        "t": 0.012492516602105343,
+        "edge": 0.001321918308161463,
+        "t_edge": 1.4848876769531518,
+        "worst": -0.23102158644542975
+      },
+      "in_sample_baseline": -0.0013107968700435176,
+      "out_of_sample": {
+        "trades": 6606,
+        "days": 1332,
+        "win": 0.46699969724492885,
+        "avg": -0.0022808376274154286,
+        "t": -2.915582852058938,
+        "edge": -0.0006002876341644077,
+        "t_edge": -0.7673445542267878,
+        "worst": -0.31721837280502313
+      },
+      "out_of_sample_baseline": -0.0016805499932510209,
+      "verified": false
+    },
+    {
+      "setup": "low_52w",
+      "desc": "Closed at a 52-week low",
+      "at_open": false,
+      "side": "short",
+      "hold": 1,
+      "hold_name": "sell next day",
+      "in_sample": {
+        "trades": 449,
+        "days": 223,
+        "win": 0.5033407572383074,
+        "avg": -0.0016145504479315109,
+        "t": -0.6729941242395581,
+        "edge": -0.00030375357788799324,
+        "t_edge": -0.12661380348769014,
+        "worst": -0.20332981394441002
+      },
+      "in_sample_baseline": -0.0013107968700435176,
+      "out_of_sample": {
+        "trades": 679,
+        "days": 252,
+        "win": 0.4256259204712813,
+        "avg": -0.0005035585254323893,
+        "t": -0.19992394520597406,
+        "edge": 0.0011769914678186316,
+        "t_edge": 0.4672918158182688,
+        "worst": -0.23147470916033913
+      },
+      "out_of_sample_baseline": -0.0016805499932510209,
+      "verified": false
+    },
+    {
+      "setup": "rsi2_high+below_200",
+      "desc": "Overbought (RSI 2 > 90) in a downtrend",
+      "at_open": false,
+      "side": "short",
+      "hold": 1,
+      "hold_name": "sell next day",
+      "in_sample": {
+        "trades": 1340,
+        "days": 619,
+        "win": 0.48134328358208955,
+        "avg": 0.00036073526029658403,
+        "t": 0.48271036213226176,
+        "edge": 0.0016715321303401017,
+        "t_edge": 2.236725845122,
+        "worst": -0.11983749785542624
+      },
+      "in_sample_baseline": -0.0013107968700435176,
+      "out_of_sample": {
+        "trades": 1761,
+        "days": 631,
+        "win": 0.47586598523566154,
+        "avg": -0.000558755552184805,
+        "t": -0.6388623805214337,
+        "edge": 0.0011217944410662158,
+        "t_edge": 1.2826221847335468,
+        "worst": -0.1509327409792905
+      },
+      "out_of_sample_baseline": -0.0016805499932510209,
+      "verified": false
+    },
+    {
+      "setup": "up3+below_200",
+      "desc": "3 up days in a downtrend",
+      "at_open": false,
+      "side": "short",
+      "hold": 1,
+      "hold_name": "sell next day",
+      "in_sample": {
+        "trades": 1343,
+        "days": 610,
+        "win": 0.4914370811615786,
+        "avg": 9.283514440276942e-05,
+        "t": 0.11860179508279628,
+        "edge": 0.001403632014446287,
+        "t_edge": 1.7932139559858853,
+        "worst": -0.11983749785542624
+      },
+      "in_sample_baseline": -0.0013107968700435176,
+      "out_of_sample": {
+        "trades": 1842,
+        "days": 658,
+        "win": 0.44733984799131377,
+        "avg": -0.0016147700013169322,
+        "t": -1.8160312675483405,
+        "edge": 6.577999193408865e-05,
+        "t_edge": 0.07397866075909124,
+        "worst": -0.1509327409792905
+      },
+      "out_of_sample_baseline": -0.0016805499932510209,
+      "verified": false
+    },
+    {
+      "setup": "close_near_high+below_200",
+      "desc": "Closed near the high, in a downtrend",
+      "at_open": false,
+      "side": "short",
+      "hold": 1,
+      "hold_name": "sell next day",
+      "in_sample": {
+        "trades": 2019,
+        "days": 659,
+        "win": 0.4323922734026746,
+        "avg": -0.0017178911945558404,
+        "t": -2.1220519459717795,
+        "edge": -0.0004070943245123228,
+        "t_edge": -0.5028696265881939,
+        "worst": -0.17349247612093693
+      },
+      "in_sample_baseline": -0.0013107968700435176,
+      "out_of_sample": {
+        "trades": 2316,
+        "days": 669,
+        "win": 0.45639032815198616,
+        "avg": -0.0009207023021222158,
+        "t": -0.9846904980389926,
+        "edge": 0.000759847691128805,
+        "t_edge": 0.8126565988667226,
+        "worst": -0.1665919059310444
+      },
+      "out_of_sample_baseline": -0.0016805499932510209,
+      "verified": false
+    },
+    {
+      "setup": "gap_up+below_200",
+      "desc": "Gaps up 1%+ at the open, in a downtrend",
+      "at_open": true,
+      "side": "short",
+      "hold": 1,
+      "hold_name": "sell next day",
+      "in_sample": {
+        "trades": 1827,
+        "days": 528,
+        "win": 0.43459222769567596,
+        "avg": -0.0009395916329426349,
+        "t": -0.7459401136833992,
+        "edge": 0.00037120523710088276,
+        "t_edge": 0.2946991725497955,
+        "worst": -0.12243071425116542
+      },
+      "in_sample_baseline": -0.0013107968700435176,
+      "out_of_sample": {
+        "trades": 2617,
+        "days": 646,
+        "win": 0.4726786396637371,
+        "avg": -0.002206098090372163,
+        "t": -1.7503925267820426,
+        "edge": -0.0005255480971211421,
+        "t_edge": -0.41698756083424326,
+        "worst": -0.1643310669329528
+      },
+      "out_of_sample_baseline": -0.0016805499932510209,
+      "verified": false
+    },
+    {
+      "setup": "big_drop+below_200",
+      "desc": "Big drop in a downtrend (keeps falling?)",
+      "at_open": false,
+      "side": "short",
+      "hold": 1,
+      "hold_name": "sell next day",
+      "in_sample": {
+        "trades": 749,
+        "days": 330,
+        "win": 0.49666221628838453,
+        "avg": -0.00011870148626137017,
+        "t": -0.09115675225897182,
+        "edge": 0.0011920953837821473,
+        "t_edge": 0.9154691065048404,
+        "worst": -0.0939963498008472
+      },
+      "in_sample_baseline": -0.0013107968700435176,
+      "out_of_sample": {
+        "trades": 853,
+        "days": 339,
+        "win": 0.5134818288393904,
+        "avg": 0.0006646670832382903,
+        "t": 0.4451150471943707,
+        "edge": 0.002345217076489311,
+        "t_edge": 1.5705477764848748,
+        "worst": -0.16661381208084786
+      },
+      "out_of_sample_baseline": -0.0016805499932510209,
+      "verified": false
+    },
+    {
+      "setup": "down3+below_200",
+      "desc": "3 down days in a downtrend (keeps falling?)",
+      "at_open": false,
+      "side": "short",
+      "hold": 1,
+      "hold_name": "sell next day",
+      "in_sample": {
+        "trades": 2304,
+        "days": 816,
+        "win": 0.4561631944444444,
+        "avg": -0.001958700565029678,
+        "t": -2.6235278820239,
+        "edge": -0.0006479036949861602,
+        "t_edge": -0.867816877684285,
+        "worst": -0.20332981394441002
+      },
+      "in_sample_baseline": -0.0013107968700435176,
+      "out_of_sample": {
+        "trades": 2600,
+        "days": 848,
+        "win": 0.4473076923076923,
+        "avg": -0.003366522803178255,
+        "t": -3.884260068651518,
+        "edge": -0.0016859728099272342,
+        "t_edge": -1.9452584299295475,
+        "worst": -0.1643310669329528
+      },
+      "out_of_sample_baseline": -0.0016805499932510209,
+      "verified": false
+    },
+    {
+      "setup": "rsi2_low",
+      "desc": "RSI(2) below 10: sharply oversold over the last 2 days",
+      "at_open": false,
+      "side": "long",
+      "hold": 2,
+      "hold_name": "sell 2 days later",
+      "in_sample": {
+        "trades": 7800,
+        "days": 1522,
+        "win": 0.551923076923077,
+        "avg": 0.0022453342233194297,
+        "t": 3.852166542488115,
+        "edge": 0.0012783279493116424,
+        "t_edge": 2.1931399368178597,
+        "worst": -0.35610012233731797
+      },
+      "in_sample_baseline": 0.0009670062740077873,
+      "out_of_sample": {
+        "trades": 7150,
+        "days": 1386,
+        "win": 0.5443356643356644,
+        "avg": 0.0023642434144197553,
+        "t": 3.13476176353479,
+        "edge": 0.0008624080297487352,
+        "t_edge": 1.1434709724612693,
+        "worst": -0.277474805399957
+      },
+      "out_of_sample_baseline": 0.00150183538467102,
+      "verified": false
+    },
+    {
+      "setup": "down3",
+      "desc": "Closed lower 3 days in a row",
+      "at_open": false,
+      "side": "long",
+      "hold": 2,
+      "hold_name": "sell 2 days later",
+      "in_sample": {
+        "trades": 6979,
+        "days": 1519,
+        "win": 0.5618283421693653,
+        "avg": 0.0025632451223383166,
+        "t": 4.583009160127127,
+        "edge": 0.0015962388483305293,
+        "t_edge": 2.8540295268272926,
+        "worst": -0.16534690222681897
+      },
+      "in_sample_baseline": 0.0009670062740077873,
+      "out_of_sample": {
+        "trades": 6626,
+        "days": 1418,
+        "win": 0.5475399939631753,
+        "avg": 0.00238956469744267,
+        "t": 3.14260665264254,
+        "edge": 0.0008877293127716498,
+        "t_edge": 1.1674862986750787,
+        "worst": -0.25218091783091573
+      },
+      "out_of_sample_baseline": 0.00150183538467102,
+      "verified": false
+    },
+    {
+      "setup": "big_drop",
+      "desc": "Fell more than 2\u00d7 its normal daily move",
+      "at_open": false,
+      "side": "long",
+      "hold": 2,
+      "hold_name": "sell 2 days later",
+      "in_sample": {
+        "trades": 2684,
+        "days": 773,
+        "win": 0.5327868852459017,
+        "avg": -0.0005473568987866326,
+        "t": -0.5613509017927621,
+        "edge": -0.00151436317279442,
+        "t_edge": -1.553080146745849,
+        "worst": -0.15323134073042904
+      },
+      "in_sample_baseline": 0.0009670062740077873,
+      "out_of_sample": {
+        "trades": 2395,
+        "days": 673,
+        "win": 0.5315240083507307,
+        "avg": 0.001086276163634181,
+        "t": 1.0160523899079759,
+        "edge": -0.00041555922103683903,
+        "t_edge": -0.38869484005815763,
+        "worst": -0.19684584678355682
+      },
+      "out_of_sample_baseline": 0.00150183538467102,
+      "verified": false
+    },
+    {
+      "setup": "close_near_low",
+      "desc": "Closed in the bottom 10% of the day's range",
+      "at_open": false,
+      "side": "long",
+      "hold": 2,
+      "hold_name": "sell 2 days later",
+      "in_sample": {
+        "trades": 7620,
+        "days": 1391,
+        "win": 0.5507874015748031,
+        "avg": 0.001377925598874527,
+        "t": 2.2316665333373478,
+        "edge": 0.00041091932486673956,
+        "t_edge": 0.6655184474079756,
+        "worst": -0.35610012233731797
+      },
+      "in_sample_baseline": 0.0009670062740077873,
+      "out_of_sample": {
+        "trades": 7262,
+        "days": 1240,
+        "win": 0.5578353070779399,
+        "avg": 0.0014955306984355498,
+        "t": 2.214932575189268,
+        "edge": -6.304686235470303e-06,
+        "t_edge": -0.009337457889629787,
+        "worst": -0.19684584678355682
+      },
+      "out_of_sample_baseline": 0.00150183538467102,
+      "verified": false
+    },
+    {
+      "setup": "above_200",
+      "desc": "Price above its 200-day average (uptrend)",
+      "at_open": false,
+      "side": "long",
+      "hold": 2,
+      "hold_name": "sell 2 days later",
+      "in_sample": {
+        "trades": 58773,
+        "days": 2264,
+        "win": 0.5359774045905433,
+        "avg": 0.000867017304321697,
+        "t": 2.8655333237544807,
+        "edge": -9.99889696860904e-05,
+        "t_edge": -0.33046828848188475,
+        "worst": -0.22400001335144043
+      },
+      "in_sample_baseline": 0.0009670062740077873,
+      "out_of_sample": {
+        "trades": 50278,
+        "days": 1956,
+        "win": 0.5308285930227933,
+        "avg": 0.0012972285507564499,
+        "t": 3.3594683098757065,
+        "edge": -0.00020460683391457018,
+        "t_edge": -0.5298759221103914,
+        "worst": -0.277474805399957
+      },
+      "out_of_sample_baseline": 0.00150183538467102,
+      "verified": false
+    },
+    {
+      "setup": "vix_high",
+      "desc": "VIX (fear index) 10%+ above its 20-day average",
+      "at_open": false,
+      "side": "long",
+      "hold": 2,
+      "hold_name": "sell 2 days later",
+      "in_sample": {
+        "trades": 13695,
+        "days": 414,
+        "win": 0.5490324936108069,
+        "avg": 0.0011268516503586516,
+        "t": 1.0717281981379487,
+        "edge": 0.00015984537635086425,
+        "t_edge": 0.15202604275608916,
+        "worst": -0.3057292956986722
+      },
+      "in_sample_baseline": 0.0009670062740077873,
+      "out_of_sample": {
+        "trades": 13055,
+        "days": 373,
+        "win": 0.5348142474147836,
+        "avg": 0.001280761494466057,
+        "t": 1.0431780751739868,
+        "edge": -0.00022107389020496315,
+        "t_edge": -0.1800643103744955,
+        "worst": -0.277474805399957
+      },
+      "out_of_sample_baseline": 0.00150183538467102,
+      "verified": false
+    },
+    {
+      "setup": "turn_of_month",
+      "desc": "Buy day is the last trading day of the month or one of the first 3",
+      "at_open": false,
+      "side": "long",
+      "hold": 2,
+      "hold_name": "sell 2 days later",
+      "in_sample": {
+        "trades": 14306,
+        "days": 438,
+        "win": 0.5364881867747798,
+        "avg": 0.0006699943717755737,
+        "t": 0.8538627551363838,
+        "edge": -0.00029701190223221366,
+        "t_edge": -0.3785216888855395,
+        "worst": -0.35610012233731797
+      },
+      "in_sample_baseline": 0.0009670062740077873,
+      "out_of_sample": {
+        "trades": 13090,
+        "days": 374,
+        "win": 0.5579831932773109,
+        "avg": 0.0030836981090983945,
+        "t": 3.348583256584541,
+        "edge": 0.0015818627244273745,
+        "t_edge": 1.7177424137609365,
+        "worst": -0.2772678636779026
+      },
+      "out_of_sample_baseline": 0.00150183538467102,
+      "verified": false
+    },
+    {
+      "setup": "gap_down",
+      "desc": "Opens 1%+ below the previous close",
+      "at_open": true,
+      "side": "long",
+      "hold": 2,
+      "hold_name": "sell 2 days later",
+      "in_sample": {
+        "trades": 4107,
+        "days": 955,
+        "win": 0.5295836376917458,
+        "avg": 0.0003624267247218023,
+        "t": 0.3198873143254325,
+        "edge": -0.000604579549285985,
+        "t_edge": -0.5336177360144327,
+        "worst": -0.3057292956986722
+      },
+      "in_sample_baseline": 0.0009670062740077873,
+      "out_of_sample": {
+        "trades": 5855,
+        "days": 1145,
+        "win": 0.530999146029035,
+        "avg": 0.0026896389209428865,
+        "t": 2.381330347648816,
+        "edge": 0.0011878035362718664,
+        "t_edge": 1.0516477085248277,
+        "worst": -0.2529230351896376
+      },
+      "out_of_sample_baseline": 0.00150183538467102,
+      "verified": false
+    },
+    {
+      "setup": "vol_spike",
+      "desc": "Volume more than 2\u00d7 its 20-day average",
+      "at_open": false,
+      "side": "long",
+      "hold": 2,
+      "hold_name": "sell 2 days later",
+      "in_sample": {
+        "trades": 2194,
+        "days": 1044,
+        "win": 0.536007292616226,
+        "avg": 0.001816436176467419,
+        "t": 1.6940851946760824,
+        "edge": 0.0008494299024596317,
+        "t_edge": 0.7922142491516392,
+        "worst": -0.1686318232267397
+      },
+      "in_sample_baseline": 0.0009670062740077873,
+      "out_of_sample": {
+        "trades": 1580,
+        "days": 678,
+        "win": 0.5670886075949367,
+        "avg": 0.0013000067308244212,
+        "t": 1.0293302110287663,
+        "edge": -0.00020182865384659886,
+        "t_edge": -0.15980558094789582,
+        "worst": -0.19684584678355682
+      },
+      "out_of_sample_baseline": 0.00150183538467102,
+      "verified": false
+    },
+    {
+      "setup": "high_52w",
+      "desc": "Closed at a 52-week high",
+      "at_open": false,
+      "side": "long",
+      "hold": 2,
+      "hold_name": "sell 2 days later",
+      "in_sample": {
+        "trades": 7561,
+        "days": 1594,
+        "win": 0.5269144293082926,
+        "avg": 0.0008438918074188996,
+        "t": 2.150518743706737,
+        "edge": -0.00012311446658888777,
+        "t_edge": -0.3137368625850822,
+        "worst": -0.18977331564070393
+      },
+      "in_sample_baseline": 0.0009670062740077873,
+      "out_of_sample": {
+        "trades": 5984,
+        "days": 1328,
+        "win": 0.5056818181818182,
+        "avg": 0.0007546104713333665,
+        "t": 1.344460226159826,
+        "edge": -0.0007472249133376536,
+        "t_edge": -1.3313016637618147,
+        "worst": -0.22090098808235165
+      },
+      "out_of_sample_baseline": 0.00150183538467102,
+      "verified": false
+    },
+    {
+      "setup": "rsi2_low+above_200",
+      "desc": "Oversold (RSI 2 < 10) in an uptrend",
+      "at_open": false,
+      "side": "long",
+      "hold": 2,
+      "hold_name": "sell 2 days later",
+      "in_sample": {
+        "trades": 4824,
+        "days": 1262,
+        "win": 0.5487147595356551,
+        "avg": 0.0016560703372803893,
+        "t": 2.8200394467942496,
+        "edge": 0.000689064063272602,
+        "t_edge": 1.173372770499702,
+        "worst": -0.14039794113335963
+      },
+      "in_sample_baseline": 0.0009670062740077873,
+      "out_of_sample": {
+        "trades": 4181,
+        "days": 1096,
+        "win": 0.5458024396077493,
+        "avg": 0.0023522394400037282,
+        "t": 3.0925137151326467,
+        "edge": 0.0008504040553327082,
+        "t_edge": 1.118035077465011,
+        "worst": -0.277474805399957
+      },
+      "out_of_sample_baseline": 0.00150183538467102,
+      "verified": false
+    },
+    {
+      "setup": "close_near_low+above_200",
+      "desc": "Closed near the low, in an uptrend",
+      "at_open": false,
+      "side": "long",
+      "hold": 2,
+      "hold_name": "sell 2 days later",
+      "in_sample": {
+        "trades": 5261,
+        "days": 1186,
+        "win": 0.5295571184185516,
+        "avg": 0.0013416548768086427,
+        "t": 2.1189350698180105,
+        "edge": 0.00037464860280085534,
+        "t_edge": 0.5916991597879284,
+        "worst": -0.14188921265575344
+      },
+      "in_sample_baseline": 0.0009670062740077873,
+      "out_of_sample": {
+        "trades": 4850,
+        "days": 1067,
+        "win": 0.5571134020618557,
+        "avg": 0.0014615043974453132,
+        "t": 2.056712240736115,
+        "edge": -4.033098722570688e-05,
+        "t_edge": -0.05675606262497547,
+        "worst": -0.1526747932364168
+      },
+      "out_of_sample_baseline": 0.00150183538467102,
+      "verified": false
+    },
+    {
+      "setup": "rsi2_low+above_200+vix_high",
+      "desc": "Oversold in an uptrend while fear is elevated",
+      "at_open": false,
+      "side": "long",
+      "hold": 2,
+      "hold_name": "sell 2 days later",
+      "in_sample": {
+        "trades": 2112,
+        "days": 311,
+        "win": 0.5620265151515151,
+        "avg": 0.0013063039652833393,
+        "t": 0.9151551416539483,
+        "edge": 0.000339297691275552,
+        "t_edge": 0.23770120505971618,
+        "worst": -0.14039794113335963
+      },
+      "in_sample_baseline": 0.0009670062740077873,
+      "out_of_sample": {
+        "trades": 1804,
+        "days": 275,
+        "win": 0.5415742793791575,
+        "avg": 0.001997840410278431,
+        "t": 1.0234365097248663,
+        "edge": 0.0004960050256074108,
+        "t_edge": 0.254089190308697,
+        "worst": -0.277474805399957
+      },
+      "out_of_sample_baseline": 0.00150183538467102,
+      "verified": false
+    },
+    {
+      "setup": "down3+above_200",
+      "desc": "3 down days in an uptrend",
+      "at_open": false,
+      "side": "long",
+      "hold": 2,
+      "hold_name": "sell 2 days later",
+      "in_sample": {
+        "trades": 4587,
+        "days": 1308,
+        "win": 0.5613690865489427,
+        "avg": 0.0024690143661358997,
+        "t": 4.421968211276787,
+        "edge": 0.0015020080921281124,
+        "t_edge": 2.6900742772370845,
+        "worst": -0.14039794113335963
+      },
+      "in_sample_baseline": 0.0009670062740077873,
+      "out_of_sample": {
+        "trades": 4027,
+        "days": 1143,
+        "win": 0.5485473056866154,
+        "avg": 0.0020799806944555668,
+        "t": 2.877720022198274,
+        "edge": 0.0005781453097845467,
+        "t_edge": 0.7998825845556689,
+        "worst": -0.23112831478005097
+      },
+      "out_of_sample_baseline": 0.00150183538467102,
+      "verified": false
+    },
+    {
+      "setup": "turn_of_month+above_200",
+      "desc": "Turn of the month, in an uptrend",
+      "at_open": false,
+      "side": "long",
+      "hold": 2,
+      "hold_name": "sell 2 days later",
+      "in_sample": {
+        "trades": 11205,
+        "days": 432,
+        "win": 0.5244979919678715,
+        "avg": 0.0005457595442887231,
+        "t": 0.7811586598742676,
+        "edge": -0.00042124672971906427,
+        "t_edge": -0.6029404969776931,
+        "worst": -0.22400001335144043
+      },
+      "in_sample_baseline": 0.0009670062740077873,
+      "out_of_sample": {
+        "trades": 9583,
+        "days": 374,
+        "win": 0.5503495773766044,
+        "avg": 0.003178507867772366,
+        "t": 3.432710641731263,
+        "edge": 0.0016766724831013457,
+        "t_edge": 1.8107652127580522,
+        "worst": -0.22090098808235165
+      },
+      "out_of_sample_baseline": 0.00150183538467102,
+      "verified": false
+    },
+    {
+      "setup": "gap_down+above_200",
+      "desc": "Gaps down 1%+ at the open, in an uptrend",
+      "at_open": true,
+      "side": "long",
+      "hold": 2,
+      "hold_name": "sell 2 days later",
+      "in_sample": {
+        "trades": 2507,
+        "days": 777,
+        "win": 0.516952532907858,
+        "avg": -0.000270387463662239,
+        "t": -0.23769456484924245,
+        "edge": -0.0012373937376700265,
+        "t_edge": -1.0877788564563922,
+        "worst": -0.1739641346356557
+      },
+      "in_sample_baseline": 0.0009670062740077873,
+      "out_of_sample": {
+        "trades": 3560,
+        "days": 961,
+        "win": 0.5410112359550562,
+        "avg": 0.002333294231415267,
+        "t": 1.989562500674548,
+        "edge": 0.0008314588467442467,
+        "t_edge": 0.708971599065359,
+        "worst": -0.23431366574896312
+      },
+      "out_of_sample_baseline": 0.00150183538467102,
+      "verified": false
+    },
+    {
+      "setup": "rsi2_high",
+      "desc": "RSI(2) above 90: sharply overbought over the last 2 days",
+      "at_open": false,
+      "side": "short",
+      "hold": 2,
+      "hold_name": "sell 2 days later",
+      "in_sample": {
+        "trades": 12876,
+        "days": 1810,
+        "win": 0.44276172724448587,
+        "avg": -0.001259394807053156,
+        "t": -3.23755828620744,
+        "edge": 0.0007076114669546322,
+        "t_edge": 1.819074809125902,
+        "worst": -0.22005821469202919
+      },
+      "in_sample_baseline": -0.001967006274007788,
+      "out_of_sample": {
+        "trades": 11525,
+        "days": 1628,
+        "win": 0.4612581344902386,
+        "avg": -0.0015667998143982325,
+        "t": -3.1497117467790217,
+        "edge": 0.0009350355702727887,
+        "t_edge": 1.8796865383058257,
+        "worst": -0.38653119891788973
+      },
+      "out_of_sample_baseline": -0.002501835384671021,
+      "verified": false
+    },
+    {
+      "setup": "up3",
+      "desc": "Closed higher 3 days in a row",
+      "at_open": false,
+      "side": "short",
+      "hold": 2,
+      "hold_name": "sell 2 days later",
+      "in_sample": {
+        "trades": 10598,
+        "days": 1748,
+        "win": 0.4357425929420645,
+        "avg": -0.0015108072660691295,
+        "t": -3.700114818561296,
+        "edge": 0.00045619900793865864,
+        "t_edge": 1.1172760069381058,
+        "worst": -0.22005821469202919
+      },
+      "in_sample_baseline": -0.001967006274007788,
+      "out_of_sample": {
+        "trades": 10259,
+        "days": 1578,
+        "win": 0.45043376547421776,
+        "avg": -0.0017332518631168,
+        "t": -3.016651201933721,
+        "edge": 0.0007685835215542212,
+        "t_edge": 1.3376869533050384,
+        "worst": -0.38653119891788973
+      },
+      "out_of_sample_baseline": -0.002501835384671021,
+      "verified": false
+    },
+    {
+      "setup": "big_rise",
+      "desc": "Rose more than 2\u00d7 its normal daily move",
+      "at_open": false,
+      "side": "short",
+      "hold": 2,
+      "hold_name": "sell 2 days later",
+      "in_sample": {
+        "trades": 2679,
+        "days": 931,
+        "win": 0.44531541620007464,
+        "avg": -0.002023903087438824,
+        "t": -2.5095354447045275,
+        "edge": -5.689681343103593e-05,
+        "t_edge": -0.07054911417552802,
+        "worst": -0.19561849472800513
+      },
+      "in_sample_baseline": -0.001967006274007788,
+      "out_of_sample": {
+        "trades": 2216,
+        "days": 784,
+        "win": 0.45306859205776173,
+        "avg": -0.001380853706097155,
+        "t": -1.3467586657653114,
+        "edge": 0.0011209816785738662,
+        "t_edge": 1.0933032102658378,
+        "worst": -0.38653119891788973
+      },
+      "out_of_sample_baseline": -0.002501835384671021,
+      "verified": false
+    },
+    {
+      "setup": "close_near_high",
+      "desc": "Closed in the top 10% of the day's range",
+      "at_open": false,
+      "side": "short",
+      "hold": 2,
+      "hold_name": "sell 2 days later",
+      "in_sample": {
+        "trades": 10864,
+        "days": 1601,
+        "win": 0.42912371134020616,
+        "avg": -0.0011653410469018642,
+        "t": -2.222677050277721,
+        "edge": 0.0008016652271059239,
+        "t_edge": 1.5290312711726417,
+        "worst": -0.1973221785451052
+      },
+      "in_sample_baseline": -0.001967006274007788,
+      "out_of_sample": {
+        "trades": 9754,
+        "days": 1425,
+        "win": 0.4531474266967398,
+        "avg": -0.0013997919837008888,
+        "t": -2.303176973477721,
+        "edge": 0.0011020434009701323,
+        "t_edge": 1.8132701247343719,
+        "worst": -0.2669635895055878
+      },
+      "out_of_sample_baseline": -0.002501835384671021,
+      "verified": false
+    },
+    {
+      "setup": "below_200",
+      "desc": "Price below its 200-day average (downtrend)",
+      "at_open": false,
+      "side": "short",
+      "hold": 2,
+      "hold_name": "sell 2 days later",
+      "in_sample": {
+        "trades": 15338,
+        "days": 2182,
+        "win": 0.4265875603077324,
+        "avg": -0.0025388486257508515,
+        "t": -5.873262081816899,
+        "edge": -0.0005718423517430634,
+        "t_edge": -1.3228752463633995,
+        "worst": -0.22062573360579202
+      },
+      "in_sample_baseline": -0.001967006274007788,
+      "out_of_sample": {
+        "trades": 18118,
+        "days": 1819,
+        "win": 0.4380726349486698,
+        "avg": -0.003271174031323901,
+        "t": -6.028911702790369,
+        "edge": -0.0007693386466528797,
+        "t_edge": -1.4179235729434,
+        "worst": -0.30772621459711696
+      },
+      "out_of_sample_baseline": -0.002501835384671021,
+      "verified": false
+    },
+    {
+      "setup": "gap_up",
+      "desc": "Opens 1%+ above the previous close",
+      "at_open": true,
+      "side": "short",
+      "hold": 2,
+      "hold_name": "sell 2 days later",
+      "in_sample": {
+        "trades": 4700,
+        "days": 1244,
+        "win": 0.4223404255319149,
+        "avg": -0.0010225370453124704,
+        "t": -0.9127742702030885,
+        "edge": 0.0009444692286953178,
+        "t_edge": 0.8430865315869344,
+        "worst": -0.33545652861856606
+      },
+      "in_sample_baseline": -0.001967006274007788,
+      "out_of_sample": {
+        "trades": 6591,
+        "days": 1331,
+        "win": 0.46002124108632986,
+        "avg": -0.003751129299049711,
+        "t": -3.9141485627855244,
+        "edge": -0.0012492939143786898,
+        "t_edge": -1.3035866240870009,
+        "worst": -0.26393107701170143
+      },
+      "out_of_sample_baseline": -0.002501835384671021,
+      "verified": false
+    },
+    {
+      "setup": "low_52w",
+      "desc": "Closed at a 52-week low",
+      "at_open": false,
+      "side": "short",
+      "hold": 2,
+      "hold_name": "sell 2 days later",
+      "in_sample": {
+        "trades": 449,
+        "days": 223,
+        "win": 0.42761692650334077,
+        "avg": -0.0038584709198000197,
+        "t": -1.4121877797567877,
+        "edge": -0.0018914646457922316,
+        "t_edge": -0.6922698950309131,
+        "worst": -0.22062573360579202
+      },
+      "in_sample_baseline": -0.001967006274007788,
+      "out_of_sample": {
+        "trades": 679,
+        "days": 252,
+        "win": 0.46244477172312226,
+        "avg": -0.0022343155912534093,
+        "t": -0.6911669700413926,
+        "edge": 0.0002675197934176119,
+        "t_edge": 0.0827550260877982,
+        "worst": -0.26393107701170143
+      },
+      "out_of_sample_baseline": -0.002501835384671021,
+      "verified": false
+    },
+    {
+      "setup": "rsi2_high+below_200",
+      "desc": "Overbought (RSI 2 > 90) in a downtrend",
+      "at_open": false,
+      "side": "short",
+      "hold": 2,
+      "hold_name": "sell 2 days later",
+      "in_sample": {
+        "trades": 1340,
+        "days": 619,
+        "win": 0.4798507462686567,
+        "avg": -0.0007316676587562723,
+        "t": -0.8202632439319012,
+        "edge": 0.0012353386152515159,
+        "t_edge": 1.384922304237169,
+        "worst": -0.15880457120404406
+      },
+      "in_sample_baseline": -0.001967006274007788,
+      "out_of_sample": {
+        "trades": 1760,
+        "days": 630,
+        "win": 0.4772727272727273,
+        "avg": -0.0023004912911747453,
+        "t": -2.0158403285025672,
+        "edge": 0.00020134409349627583,
+        "t_edge": 0.1764308107284001,
+        "worst": -0.2541113685125956
+      },
+      "out_of_sample_baseline": -0.002501835384671021,
+      "verified": false
+    },
+    {
+      "setup": "up3+below_200",
+      "desc": "3 up days in a downtrend",
+      "at_open": false,
+      "side": "short",
+      "hold": 2,
+      "hold_name": "sell 2 days later",
+      "in_sample": {
+        "trades": 1343,
+        "days": 610,
+        "win": 0.47282204020848845,
+        "avg": 8.948219848749998e-05,
+        "t": 0.09923039403306962,
+        "edge": 0.002056488472495288,
+        "t_edge": 2.2805224379760793,
+        "worst": -0.15880457120404406
+      },
+      "in_sample_baseline": -0.001967006274007788,
+      "out_of_sample": {
+        "trades": 1841,
+        "days": 657,
+        "win": 0.44866920152091255,
+        "avg": -0.002373547874169152,
+        "t": -2.044617479080226,
+        "edge": 0.000128287510501869,
+        "t_edge": 0.11050920403770062,
+        "worst": -0.2541113685125956
+      },
+      "out_of_sample_baseline": -0.002501835384671021,
+      "verified": false
+    },
+    {
+      "setup": "close_near_high+below_200",
+      "desc": "Closed near the high, in a downtrend",
+      "at_open": false,
+      "side": "short",
+      "hold": 2,
+      "hold_name": "sell 2 days later",
+      "in_sample": {
+        "trades": 2019,
+        "days": 659,
+        "win": 0.3967310549777117,
+        "avg": -0.002932174596804087,
+        "t": -2.7214411690199602,
+        "edge": -0.000965168322796299,
+        "t_edge": -0.8958023207604009,
+        "worst": -0.19373912966873302
+      },
+      "in_sample_baseline": -0.001967006274007788,
+      "out_of_sample": {
+        "trades": 2312,
+        "days": 668,
+        "win": 0.4455017301038062,
+        "avg": -0.0017886703522267406,
+        "t": -1.6002078612748734,
+        "edge": 0.0007131650324442805,
+        "t_edge": 0.6380227021054924,
+        "worst": -0.1667845502923822
+      },
+      "out_of_sample_baseline": -0.002501835384671021,
+      "verified": false
+    },
+    {
+      "setup": "gap_up+below_200",
+      "desc": "Gaps up 1%+ at the open, in a downtrend",
+      "at_open": true,
+      "side": "short",
+      "hold": 2,
+      "hold_name": "sell 2 days later",
+      "in_sample": {
+        "trades": 1827,
+        "days": 528,
+        "win": 0.4072249589490969,
+        "avg": -0.0029142116784313154,
+        "t": -1.8593391801021333,
+        "edge": -0.0009472054044235272,
+        "t_edge": -0.6043404921763166,
+        "worst": -0.19373912966873302
+      },
+      "in_sample_baseline": -0.001967006274007788,
+      "out_of_sample": {
+        "trades": 2611,
+        "days": 645,
+        "win": 0.46036001531980086,
+        "avg": -0.0032227233086013405,
+        "t": -2.098948896645929,
+        "edge": -0.0007208879239303193,
+        "t_edge": -0.46951189030112717,
+        "worst": -0.26393107701170143
+      },
+      "out_of_sample_baseline": -0.002501835384671021,
+      "verified": false
+    },
+    {
+      "setup": "big_drop+below_200",
+      "desc": "Big drop in a downtrend (keeps falling?)",
+      "at_open": false,
+      "side": "short",
+      "hold": 2,
+      "hold_name": "sell 2 days later",
+      "in_sample": {
+        "trades": 749,
+        "days": 330,
+        "win": 0.4152202937249666,
+        "avg": -0.0010592123887370112,
+        "t": -0.6537516623438995,
+        "edge": 0.0009077938852707769,
+        "t_edge": 0.5602953363008191,
+        "worst": -0.1567134459210649
+      },
+      "in_sample_baseline": -0.001967006274007788,
+      "out_of_sample": {
+        "trades": 851,
+        "days": 338,
+        "win": 0.49588719153936545,
+        "avg": -0.00027216094189835214,
+        "t": -0.14998413818461254,
+        "edge": 0.002229674442772669,
+        "t_edge": 1.2287428071012998,
+        "worst": -0.30772621459711696
+      },
+      "out_of_sample_baseline": -0.002501835384671021,
+      "verified": false
+    },
+    {
+      "setup": "down3+below_200",
+      "desc": "3 down days in a downtrend (keeps falling?)",
+      "at_open": false,
+      "side": "short",
+      "hold": 2,
+      "hold_name": "sell 2 days later",
+      "in_sample": {
+        "trades": 2304,
+        "days": 816,
+        "win": 0.4197048611111111,
+        "avg": -0.0027411259826823995,
+        "t": -2.9374525092859183,
+        "edge": -0.0007741197086746114,
+        "t_edge": -0.8295641627199851,
+        "worst": -0.22062573360579202
+      },
+      "in_sample_baseline": -0.001967006274007788,
+      "out_of_sample": {
+        "trades": 2597,
+        "days": 847,
+        "win": 0.4355025028879476,
+        "avg": -0.004176235068301639,
+        "t": -3.5883029972440985,
+        "edge": -0.0016743996836306179,
+        "t_edge": -1.438677015324166,
+        "worst": -0.24327905731362748
+      },
+      "out_of_sample_baseline": -0.002501835384671021,
+      "verified": false
+    }
+  ]
+}

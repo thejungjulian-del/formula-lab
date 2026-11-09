@@ -1,0 +1,790 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Forecast · Formula Lab</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: answer first. Nav → stock header → decision card (what to do + odds + range) → where the number comes from → your views (sliders) → settings and math, folded away. */
+:root {
+  --bg: #f2f4f6; --surface: #ffffff; --ink: #16202a; --muted: #5b6874; --rule: #d3dae1; --accent: #1f4e79; --tint: #e7edf3;
+  --good: #0b7a59; --bad: #b02c4c; --warn: #9a5800;
+  --f-display: "IBM Plex Sans Condensed", "Arial Narrow", system-ui, sans-serif;
+  --f-body: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root {
+  --bg: #0e1318; --surface: #151c23; --ink: #e2e8ee; --muted: #94a2af; --rule: #28333e; --accent: #82b4e6; --tint: #1b2530;
+  --good: #4fcba1; --bad: #f27c93; --warn: #e6a94c; color-scheme: dark } }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 var(--f-body); }
+h1, h2, h3 { font-family: var(--f-display); font-weight: 600; margin: 0; line-height: 1.15; }
+h1 { font-size: 1.8rem; } h2 { font-size: 1.2rem; } h3 { font-size: 1rem; }
+p { margin: 0; }
+button, input, select { font: inherit; color: inherit; }
+button { background: var(--surface); border: 1px solid var(--rule); border-radius: 5px; padding: 7px 12px; cursor: pointer; }
+button:hover { border-color: var(--accent); }
+button.primary { background: var(--accent); border-color: var(--accent); color: var(--bg); font-weight: 600; }
+input, select { background: var(--bg); border: 1px solid var(--rule); border-radius: 5px; padding: 7px 9px; min-width: 0; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.eyebrow { font: 500 .72rem/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.hint { color: var(--muted); font-size: .88rem; max-width: 72ch; }
+.pos { color: var(--good); } .neg { color: var(--bad); }
+
+/* nav */
+.topnav { position: sticky; top: 0; z-index: 5; background: var(--surface); border-bottom: 1px solid var(--rule); }
+.topnav .in { max-width: 1180px; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; gap: 8px 20px; flex-wrap: wrap; }
+.brand { font: 600 1.1rem var(--f-display); color: var(--ink); text-decoration: none; }
+.tabs { display: flex; gap: 2px; }
+.tabs a { text-decoration: none; color: var(--muted); padding: 6px 11px; border-radius: 5px; font-weight: 500; font-size: .92rem; }
+.tabs a:hover { color: var(--ink); }
+.tabs a[aria-current] { background: var(--tint); color: var(--ink); }
+.search { margin-left: auto; display: flex; gap: 6px; }
+#ticker { font: 600 1rem var(--f-mono); width: 10ch; text-transform: uppercase; }
+
+/* page = map on the left (what each part is) + the parts, numbered in reading order */
+.layout { max-width: 1260px; margin: 0 auto; padding: 0 16px; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 26px; }
+.pagemap { position: sticky; top: 58px; align-self: start; padding: 22px 0 24px; display: flex; flex-direction: column; gap: 2px; }
+.pagemap .eyebrow { padding: 0 10px 8px; }
+.pagemap a { display: grid; grid-template-columns: 1.5rem minmax(0, 1fr); gap: 1px 6px; text-decoration: none; color: var(--muted);
+  padding: 7px 10px 7px 7px; border-radius: 6px; border-left: 3px solid transparent; }
+.pagemap a:hover { background: var(--surface); }
+.pagemap a.on { background: var(--surface); border-left-color: var(--accent); }
+.pagemap .n { font: 600 .8rem/1.5 var(--f-mono); color: var(--accent); }
+.pagemap b { color: var(--ink); font-weight: 600; font-size: .9rem; }
+.pagemap small { grid-column: 2; font-size: .76rem; line-height: 1.35; }
+.pagemap .legend { margin-top: 14px; padding: 12px 10px 0; border-top: 1px solid var(--rule); display: flex; flex-direction: column; gap: 6px; font-size: .76rem; color: var(--muted); }
+.pagemap .legend span { display: flex; gap: 8px; align-items: center; }
+@media (max-width: 1000px) {
+  .layout { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .pagemap { position: static; flex-direction: row; overflow-x: auto; padding: 14px 0 0; gap: 6px; }
+  .pagemap .eyebrow, .pagemap small, .pagemap .legend { display: none; }
+  .pagemap a { white-space: nowrap; background: var(--surface); border: 1px solid var(--rule); grid-template-columns: auto auto; }
+}
+.wrap { padding: 22px 0 80px; display: flex; flex-direction: column; gap: 18px; transition: opacity .2s; min-width: 0; }
+section, details.card, .sh { scroll-margin-top: 70px; }
+
+/* every part opens the same way: number, title, what it does, how much to trust it */
+.sh { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 4px 12px; align-items: start; }
+.sn { font: 600 .9rem/1 var(--f-mono); color: var(--accent); border: 1.5px solid var(--accent); border-radius: 50%; width: 1.9rem; height: 1.9rem; display: grid; place-items: center; }
+.sh p { color: var(--muted); font-size: .88rem; margin-top: 3px; max-width: 70ch; }
+.trust { font: 500 .68rem/1 var(--f-mono); text-transform: uppercase; letter-spacing: .05em; padding: 5px 9px; border-radius: 999px; white-space: nowrap; }
+.t-tested { background: color-mix(in srgb, var(--good) 16%, transparent); color: var(--good); }
+.t-failed { background: color-mix(in srgb, var(--warn) 16%, transparent); color: var(--warn); }
+.t-yours { background: color-mix(in srgb, var(--accent) 16%, transparent); color: var(--accent); }
+.t-mix { background: var(--tint); color: var(--ink); }
+.t-ref { border: 1px solid var(--rule); color: var(--muted); }
+@media (max-width: 560px) { .sh { grid-template-columns: auto minmax(0, 1fr); } .sh .trust { grid-column: 2; justify-self: start; } }
+.cardtools { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.btag { font: 500 .66rem/1 var(--f-mono); text-transform: uppercase; letter-spacing: .04em; margin-left: 8px; padding: 3px 6px; border-radius: 999px; vertical-align: 1px; }
+
+/* first-visit guide */
+.start { background: var(--surface); border: 1px solid var(--accent); border-radius: 8px; padding: 14px 18px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 16px; align-items: start; }
+@media (max-width: 560px) { .start { grid-template-columns: minmax(0, 1fr); } }
+.start ol { margin: 6px 0 0; padding-left: 20px; display: flex; flex-direction: column; gap: 3px; font-size: .92rem; }
+dl.gloss { display: grid; grid-template-columns: minmax(120px, 13rem) minmax(0, 1fr); gap: 8px 18px; margin: 0; font-size: .9rem; }
+dl.gloss dt { font-weight: 600; } dl.gloss dd { margin: 0; color: var(--muted); }
+@media (max-width: 560px) { dl.gloss { grid-template-columns: 1fr; } dl.gloss dd { margin-bottom: 6px; } }
+.wrap.loading { opacity: .45; pointer-events: none; }
+
+/* stock header */
+.stockhead { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 14px; }
+.meta { display: flex; gap: 14px; flex-wrap: wrap; color: var(--muted); font-size: .9rem; margin-top: 4px; }
+.meta strong { font: 600 1.05rem var(--f-mono); color: var(--ink); }
+.controls { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.controls label { display: flex; gap: 8px; align-items: center; font-size: .88rem; color: var(--muted); }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; }
+.seg button { border: none; border-radius: 0; padding: 7px 13px; background: var(--surface); }
+.seg button + button { border-left: 1px solid var(--rule); }
+.seg button.on { background: var(--accent); color: var(--bg); font-weight: 600; }
+#status { font-size: .9rem; color: var(--muted); }
+#status.err { color: var(--bad); font-weight: 500; }
+
+/* decision card */
+.decision { background: var(--surface); border: 1px solid var(--rule); border-top: 5px solid var(--muted); border-radius: 8px; padding: 22px;
+  display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 20px 28px; }
+.decision > .sh { grid-column: 1 / -1; }
+.decision[data-act="BUY"] { border-top-color: var(--good); }
+.decision[data-act="SELL"], .decision[data-act="SHORT"] { border-top-color: var(--bad); }
+.decision[data-act="COVER"] { border-top-color: var(--good); }
+@media (max-width: 860px) { .decision { grid-template-columns: 1fr; } }
+.dl, .dr { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.what { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+#aWhat { font: 600 2.2rem/1.05 var(--f-display); }
+.decision[data-act="BUY"] #aWhat { color: var(--good); }
+.decision[data-act="SELL"] #aWhat, .decision[data-act="SHORT"] #aWhat { color: var(--bad); }
+.decision[data-act="COVER"] #aWhat { color: var(--good); }
+.badge { font: 500 .72rem/1 var(--f-mono); padding: 5px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: .05em; }
+.badge.weak { background: color-mix(in srgb, var(--warn) 16%, transparent); color: var(--warn); }
+.badge.mid { background: var(--tint); color: var(--ink); }
+.badge.ok { background: color-mix(in srgb, var(--good) 16%, transparent); color: var(--good); }
+.badge.down { background: color-mix(in srgb, var(--bad) 14%, transparent); color: var(--bad); }
+#aWhy { font-size: .98rem; max-width: 60ch; }
+.next { background: var(--tint); border-radius: 6px; padding: 12px 14px; display: flex; flex-direction: column; gap: 3px; }
+#aNext { font-size: 1.05rem; }
+#aNextWhy { font-size: .85rem; color: var(--muted); }
+.logbox { border: 1px dashed var(--rule); border-radius: 6px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+.logrow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: .9rem; }
+.logrow input { font-family: var(--f-mono); width: 9ch; text-align: right; }
+#logMsg { font-size: .84rem; color: var(--muted); }
+#logMsg.ok { color: var(--good); font-weight: 500; } #logMsg.err { color: var(--bad); }
+
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.stat { background: var(--tint); border-radius: 6px; padding: 11px 13px; display: flex; flex-direction: column; gap: 3px; }
+.stat span { font-size: .78rem; color: var(--muted); }
+.stat output { font: 500 1.45rem/1.1 var(--f-mono); font-variant-numeric: tabular-nums; }
+.stat small { font-size: .74rem; color: var(--muted); }
+.settings input[type=checkbox] { width: auto; }
+
+.range { display: flex; flex-direction: column; gap: 8px; }
+.rtrack { position: relative; height: 34px; background: var(--tint); border-radius: 5px; margin-top: 14px; }
+.rband { position: absolute; top: 9px; height: 16px; border-radius: 3px; }
+.rband.outer { background: color-mix(in srgb, var(--accent) 22%, transparent); }
+.rband.inner { background: color-mix(in srgb, var(--accent) 45%, transparent); }
+.rzero { position: absolute; top: 3px; bottom: 3px; width: 2px; background: var(--ink); opacity: .55; }
+.rzero::after { content: "0%"; position: absolute; top: -18px; left: -8px; font: 500 .68rem var(--f-mono); color: var(--muted); }
+.rmark { position: absolute; top: 4px; width: 4px; height: 26px; margin-left: -2px; background: var(--ink); border-radius: 2px; }
+.rlabels { display: flex; justify-content: space-between; gap: 8px; font-size: .8rem; color: var(--muted); }
+.rlabels b { display: block; font: 500 .9rem var(--f-mono); color: var(--ink); }
+.rlabels span:nth-child(2) { text-align: center; } .rlabels span:last-child { text-align: right; }
+.rnote { font-size: .82rem; color: var(--muted); }
+
+/* cards */
+.card { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.cardhead { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+
+.breakdown { display: flex; flex-direction: column; gap: 2px; }
+.brow { display: grid; grid-template-columns: minmax(130px, 15rem) minmax(0, 1fr) 7rem; gap: 12px; align-items: center; padding: 6px 0; font-size: .9rem; }
+.brow.total { border-top: 1px solid var(--ink); margin-top: 4px; padding-top: 10px; font-weight: 600; }
+.btrack { position: relative; height: 14px; }
+.btrack::before { content: ""; position: absolute; left: 50%; top: -3px; bottom: -3px; width: 1px; background: var(--rule); }
+.bbar { position: absolute; top: 0; height: 14px; border-radius: 2px; }
+.bbar.pos { background: var(--good); } .bbar.neg { background: var(--bad); }
+.bval { font-family: var(--f-mono); text-align: right; font-variant-numeric: tabular-nums; }
+@media (max-width: 560px) { .brow { grid-template-columns: 1fr 5.5rem; } .btrack { grid-column: 1 / -1; grid-row: 2; } }
+
+.views { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+.vcard { border: 1px solid var(--rule); border-radius: 7px; padding: 14px; display: flex; flex-direction: column; gap: 7px; min-width: 0; }
+.vhead { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.vnow { font: .82rem var(--f-mono); color: var(--muted); }
+.vsens { font-size: .9rem; }
+.vwhy { font-size: .82rem; color: var(--muted); }
+ul.vwhy { margin: 0; padding-left: 18px; }
+.vinput { display: grid; grid-template-columns: auto minmax(0, 1fr) 7ch auto; gap: 8px; align-items: center; margin-top: auto; padding-top: 6px; }
+.vinput input[type=range] { width: 100%; accent-color: var(--accent); padding: 0; border: none; background: none; }
+.vinput .num { font-family: var(--f-mono); text-align: right; width: 100%; padding: 5px 6px; }
+.vlabel, .unit { font-size: .8rem; color: var(--muted); }
+.vadds { font-size: .85rem; color: var(--muted); }
+.vadds strong { font-family: var(--f-mono); }
+
+details.card > summary { list-style: none; cursor: pointer; display: block; }
+details.card > summary::-webkit-details-marker { display: none; }
+details.card > summary h2::after { content: " ▸"; color: var(--muted); }
+details.card[open] > summary h2::after { content: " ▾"; }
+details.card > summary .sh p span { color: var(--muted); }
+.settings { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px 20px; }
+.settings label { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: .9rem; }
+.settings label small { display: block; color: var(--muted); font-size: .78rem; }
+.settings input { width: 10ch; font-family: var(--f-mono); text-align: right; }
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: .88rem; min-width: 520px; }
+th { text-align: left; font: 500 .68rem/1.2 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding: 6px; border-bottom: 1px solid var(--ink); }
+td { padding: 8px 6px; border-bottom: 1px solid var(--rule); }
+th.r, td.r { text-align: right; } td.m { font-family: var(--f-mono); white-space: nowrap; }
+td input { width: 8ch; font-family: var(--f-mono); text-align: right; }
+
+ol.steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+ol.steps li { display: grid; grid-template-columns: 1.8rem minmax(0, 1fr); gap: 4px 8px; padding: 11px 0; border-top: 1px solid var(--rule); }
+ol.steps .n { font: 600 .82rem/1.4 var(--f-mono); color: var(--accent); }
+ol.steps .t { font-weight: 600; font-size: .92rem; display: flex; justify-content: space-between; gap: 8px; }
+ol.steps .t output { font-family: var(--f-mono); white-space: nowrap; }
+ol.steps .f { grid-column: 2; font: .8rem/1.5 var(--f-mono); background: var(--tint); padding: 6px 9px; border-radius: 4px; overflow-x: auto; white-space: nowrap; }
+ol.steps .d { grid-column: 2; font-size: .84rem; color: var(--muted); }
+.fine { font-size: .82rem; color: var(--muted); display: flex; flex-direction: column; gap: 4px; }
+tr.off td { color: var(--muted); }
+h3.sub { margin: 22px 0 6px; font-size: 1rem; }
+table.plain { min-width: 0; }
+table.plain th { text-transform: none; letter-spacing: 0; font-family: inherit; font-size: .9rem; font-weight: 600; color: var(--ink); white-space: nowrap; border-bottom: 1px solid var(--rule); width: 1%; padding: 10px 14px 10px 0; vertical-align: top; }
+table.plain td { padding: 10px 14px 10px 0; vertical-align: top; border-bottom: 1px solid var(--rule); }
+table.plain td.m { white-space: normal; font-weight: 600; width: 34%; }
+#setupTable td { vertical-align: middle; }
+</style>
+</head>
+<body>
+<nav class="topnav" aria-label="Main">
+  <div class="in">
+    <a class="brand" href="/">Formula Lab</a>
+    <div class="tabs"><a href="/">Plan</a><a href="/journal">Portfolio</a><a href="/forecast" aria-current="page">Stock details</a><a href="/research">Research</a><a href="/builder">Formula builder</a></div>
+    <form class="search" id="tform" role="search">
+      <input id="ticker" aria-label="Stock ticker" placeholder="Ticker" autocomplete="off" spellcheck="false">
+      <button class="primary" type="submit">Forecast</button>
+    </form>
+  </div>
+</nav>
+
+<div class="layout">
+<nav class="pagemap" id="pagemap" aria-label="Parts of this page">
+  <span class="eyebrow">On this page</span>
+  <a href="#s-answer"><span class="n">1</span><b>The answer</b><small>What to do now and when to check again</small></a>
+  <a href="#s-numbers"><span class="n">2</span><b>Every number</b><small>Win chance, profit, costs, risk, in plain words</small></a>
+  <a href="#s-why"><span class="n">3</span><b>Why</b><small>What pushes the forecast up or down</small></a>
+  <a href="#s-tested"><span class="n">4</span><b>Tested signals</b><small>Signals checked on past data, and what passed</small></a>
+  <a href="#s-setups"><span class="n">5</span><b>Patterns today</b><small>Chart patterns active today and their track record</small></a>
+  <a href="#s-views"><span class="n">6</span><b>Your views</b><small>Sliders: what you think the market will do</small></a>
+  <a href="#setCard"><span class="n">7</span><b>Settings</b><small>Account size, costs, how big to bet</small></a>
+  <a href="#s-math"><span class="n">8</span><b>The math</b><small>Every calculation with real numbers</small></a>
+  <a href="#s-words"><span class="n">9</span><b>Words used here</b><small>Plain meanings of the trading terms</small></a>
+  <div class="legend">
+    <span><i class="trust t-tested">Tested</i> passed a test on past data</span>
+    <span><i class="trust t-failed">Not proven</i> tested, did not pass</span>
+    <span><i class="trust t-yours">Your input</i> your own settings or guesses</span>
+    <span><i class="trust t-mix">Mixed</i> combines several parts</span>
+  </div>
+</nav>
+<main class="wrap" id="main">
+  <div class="stockhead">
+    <div>
+      <h1 id="title">Loading…</h1>
+      <div class="meta"><strong id="price"></strong><span id="asof"></span></div>
+    </div>
+    <div class="controls">
+      <label for="sector">Sector <select id="sector"></select></label>
+    </div>
+  </div>
+  <span id="status">Type a ticker in the search box. Everything fills in from real market data.</span>
+  <section class="start" id="start" hidden>
+    <div><b>How to use this page</b>
+      <ol>
+        <li>Type a stock in the search box at the top right (for example AAPL).</li>
+        <li>Everything here is a day trade: buy at the open, sell at the close.</li>
+        <li>Read <b>part 1, the answer</b>. Parts 2–9 explain where it comes from. Use the page map (left side, or the row of buttons on a phone) to jump around.</li>
+        <li>Check the colored labels: <i class="trust t-tested">Tested</i> parts passed a real test; <i class="trust t-yours">Your input</i> parts are your own guesses.</li>
+      </ol>
+    </div>
+    <button type="button" id="startHide">Got it, hide this</button>
+  </section>
+
+  <section class="decision" id="decision" aria-live="polite">
+    <header class="sh" id="s-answer"><span class="sn">1</span><div><h2>The answer</h2><p>What to do right now with this stock, how sure the forecast is, and when to look again. Everything below feeds into this.</p></div><span class="trust t-mix">Mixed</span></header>
+    <div class="dl">
+      <span class="eyebrow" id="dEyebrow">What to do now</span>
+      <div class="what"><span id="aWhat">—</span><span class="badge" id="conf"></span></div>
+      <p id="aWhy"></p>
+      <div class="next"><span class="eyebrow">Next check</span><strong id="aNext">—</strong><span id="aNextWhy"></span></div>
+      <div class="logbox">
+        <div class="logrow">
+          <label for="lShares">Shares</label><input id="lShares" inputmode="decimal">
+          <label for="lPrice">at $</label><input id="lPrice" inputmode="decimal">
+          <button class="primary" type="button" id="logBtn">I did this · log it</button>
+        </div>
+        <span id="logMsg">After you trade at your broker, log it here. It goes on your Portfolio page with its check date.</span>
+      </div>
+    </div>
+    <div class="dr">
+      <div class="stats">
+        <div class="stat"><span>Where the stock is heading</span><output id="tMu">—</output><small>average expected move</small></div>
+        <div class="stat"><span>Chance this trade makes money</span><output id="tP">—</output><small id="tPnote">after costs</small></div>
+        <div class="stat"><span>Suggested position</span><output id="tW">—</output><small>share of your account</small></div>
+        <div class="stat"><span>Expected profit</span><output id="tD">—</output><small>average, in dollars</small></div>
+      </div>
+      <div class="range">
+        <span class="eyebrow">Likely stock move over the next <span class="hz">day</span></span>
+        <div class="rtrack" id="rtrack"></div>
+        <div class="rlabels" id="rlabels"></div>
+        <span class="rnote" id="rnote"></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="s-numbers">
+    <header class="sh"><span class="sn">2</span><div><h2>Every number, explained</h2><p>The answer above, line by line: what to bet, chance of winning, profit, costs and risk in dollars, plus where this stock ranks on the two tested signals. <span id="plainWhen"></span></p></div><span class="trust t-mix">Mixed</span></header>
+    <div class="scroll"><table class="plain"><tbody id="plain"></tbody></table></div>
+  </section>
+
+  <section class="card" id="s-why">
+    <header class="sh"><span class="sn">3</span><div><h2>Why: what moves the forecast</h2><p>Each line adds to or subtracts from the expected move. Green pushes it up, red pushes it down, and the bottom line is the total. Each line's label says whether it is tested or your own view.</p></div><span class="trust t-mix">Mixed</span></header>
+    <div class="breakdown" id="breakdown"></div>
+  </section>
+
+  <section class="card" id="s-tested">
+    <header class="sh"><span class="sn">4</span><div><h2>Tested signals</h2><p>Signals checked on years of past data. Only ones that held up in later years are added to the forecast. The gap and volume signals are in part 2.</p></div><span class="trust t-tested">Tested</span></header>
+    <h3>Day-trading model</h3>
+    <p class="hint" id="modelNote">Loading…</p>
+    <div class="scroll"><table><thead><tr><th>Signal</th><th class="r">Today</th><th class="r">Weight</th><th class="r">Adds</th></tr></thead><tbody id="modelRows"></tbody></table></div>
+    <p class="fine" id="modelFine"></p>
+    <h3 class="sub">Analysts and earnings <span class="trust t-failed">Not proven</span></h3>
+    <p class="hint" id="qualNote"></p>
+    <div class="scroll"><table><thead><tr><th>Reason</th><th class="r">Today</th><th>Test result</th></tr></thead><tbody id="qualRows"></tbody></table></div>
+  </section>
+
+  <section class="card" id="s-setups">
+    <header class="sh"><span class="sn">5</span><div><h2>Patterns active today</h2><p>Classic chart patterns (like "down 3 days in a row") and how they did since 2019. None passed the full test, so treat them as background, not a reason to trade.</p></div><span class="trust t-failed">Not proven</span></header>
+    <div class="cardtools"><span class="hint">Sell after:</span><div class="seg" role="group" aria-label="When to sell" id="holdSeg"></div></div>
+    <p class="hint" id="setupNote">Checking today's setups…</p>
+    <div class="scroll"><table id="setupTable"><thead><tr><th>Setup</th><th>Side</th><th>Today</th><th class="r">Win rate</th><th class="r">Avg per trade</th><th class="r">On $100</th><th class="r">Worst trade</th><th>Test result</th></tr></thead><tbody id="setups"></tbody></table></div>
+    <p class="fine" id="setupFine"></p>
+  </section>
+
+  <section class="card" id="s-views">
+    <header class="sh"><span class="sn">6</span><div><h2>Your views</h2><p>What you think the market and this sector will do. Each slider changes the forecast in parts 1–3 right away. No opinion? Leave the defaults.</p></div><span class="trust t-yours">Your input</span></header>
+    <div class="cardtools"><span></span><button type="button" id="resetViews">Reset to defaults</button></div>
+    <p class="hint">Drag a slider to set your view for the next <span class="hz">day</span>. Everything above updates instantly. If you have no opinion, leave it at the default: the market at its 5-year average, everything else unchanged.</p>
+    <div class="views" id="views"></div>
+  </section>
+
+  <details class="card" id="setCard">
+    <summary><header class="sh"><span class="sn">7</span><div><h2>Settings</h2><p>Your account size, your broker's costs, and how big a bet to allow. Click to open. <span id="setSummary"></span></p></div><span class="trust t-yours">Your input</span></header></summary>
+    <div class="settings">
+      <label for="equity"><span>Account size<small>$ you have to invest</small></span><input id="equity" inputmode="decimal"></label>
+      <label for="maxw"><span>Max in one stock<small>% of your account</small></span><input id="maxw" inputmode="decimal"></label>
+      <label for="lam"><span>Caution<small>Higher = smaller bets. 4 bets a quarter of the math-optimal size (safer)</small></span><input id="lam" inputmode="decimal"></label>
+      <label for="cost"><span>Trading cost<small>Buying + selling, in hundredths of a % (5 = 0.05%)</small></span><input id="cost" inputmode="decimal"></label>
+      <label for="mintrade"><span>Minimum trade<small>$; smaller changes say "hold"</small></span><input id="mintrade" inputmode="decimal"></label>
+      <label for="shorts"><span>Allow short selling<small>Needs a margin account, usually $2,000+</small></span><input type="checkbox" id="shorts" checked></label>
+    </div>
+    <h3>Momentum signals</h3>
+    <p class="hint">Where the stock stands today compared with its own 5-year history (0 = normal, +2 = unusually high). The weight is the % per month you give each unit. Research supports a small positive weight on momentum; the others start at 0.</p>
+    <div class="scroll"><table><thead><tr><th>Signal</th><th class="r">Actual</th><th class="r">Today vs. history</th><th class="r">Weight</th><th class="r">Adds</th></tr></thead><tbody id="sig"></tbody></table></div>
+  </details>
+
+  <details class="card" id="s-math">
+    <summary><header class="sh"><span class="sn">8</span><div><h2>The math</h2><p>Every calculation behind parts 1–3, with today's real numbers plugged in. Click to open.</p></div><span class="trust t-ref">Reference</span></header></summary>
+    <ol class="steps" id="steps"></ol>
+    <div class="fine" id="fine"></div>
+  </details>
+
+  <details class="card" id="s-words">
+    <summary><header class="sh"><span class="sn">9</span><div><h2>Words used here</h2><p>Plain meanings of the trading terms on this page. Click to open.</p></div><span class="trust t-ref">Reference</span></header></summary>
+    <dl class="gloss">
+      <dt>Buy (long)</dt><dd>You own shares and make money if the price goes up.</dd>
+      <dt>Short</dt><dd>You borrow shares and sell them, then buy them back later. You make money if the price goes down. Needs a margin account.</dd>
+      <dt>Round-trip cost</dt><dd>What buying and then selling costs you in total: fees plus the spread. 0.05% of $25 is about 1 cent.</dd>
+      <dt>Spread</dt><dd>The gap between the price buyers pay and sellers get. "Commission-free" apps still charge you this.</dd>
+      <dt>bps (basis points)</dt><dd>Hundredths of a percent. 5 bps = 0.05%.</dd>
+      <dt>Win chance</dt><dd>How often a trade like this ends with more money than it started, after costs.</dd>
+      <dt>Expected profit</dt><dd>The average result if you made this same trade many times. Any single trade can win or lose much more.</dd>
+      <dt>Bad case (1 in 20)</dt><dd>A loss this big or bigger happens about once every 20 trades.</dd>
+      <dt>Gap</dt><dd>How far the opening price is from yesterday's close.</dd>
+      <dt>Top fifth</dt><dd>The best-ranked 20% of the ~500 S&P 500 stocks on a signal that day.</dd>
+      <dt>Tested / passed</dt><dd>Checked on 2010–2018, again on 2019–2022, and once more on 2023–today data that stayed locked until the end.</dd>
+      <dt>t (t-stat)</dt><dd>How sure a result is not luck. Above about 2 is unlikely to be luck. Above 3 is strong.</dd>
+      <dt>Margin account</dt><dd>A brokerage account that lets you borrow. Needed for shorting.</dd>
+    </dl>
+  </details>
+</main>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const el = (tag, props = {}, ...kids) => { const e = Object.assign(document.createElement(tag), props); e.append(...kids); return e; };
+const HZ = { 1: 'day' }, BTN = { 1: '1 day' };  // day trading only: one horizon
+const SIGNALS = [
+  { k: 'mom_12_1', label: 'Momentum (12-month, skip last month)', w: 0.10 },
+  { k: 'trend_200', label: 'Trend (vs. 200-day average)', w: 0 },
+  { k: 'rev_5d', label: 'Last 5 days (reversal: use a negative weight)', w: 0 },
+];
+const SETTINGS = { equity: 100, maxw: 25, lam: 4, cost: 5, mintrade: 5 };
+let M = null, H = 1, J = null, pending = null;
+
+const pc = (x, d = 2) => x == null ? '—' : (x < 0 ? '−' : '+') + Math.abs(x * 100).toFixed(d) + '%';
+const pp = (x, d = 2) => x == null ? '—' : (x < 0 ? '−' : '+') + Math.abs(x).toFixed(d) + ' pp';
+const signed = (x, d = 2) => (x < 0 ? '−' : '+') + Math.abs(x).toFixed(d);
+const usd = x => { const d = Math.abs(x) < 100 ? 2 : 0; return (x < 0 ? '−' : '') + '$' + Math.abs(x).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d }); };
+const sh = x => String(+x.toFixed(2));
+const usd2 = x => '$' + x.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const num = id => { const v = parseFloat($(id).value); return isFinite(v) ? v : 0; };
+const cls = x => x > 0 ? 'pos' : x < 0 ? 'neg' : '';
+const nice = s => new Date(s + 'T12:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+const iso = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+function addBiz(n) { const d = new Date(); while (n > 0) { d.setDate(d.getDate() + 1); if (d.getDay() % 6) n--; } return d; }
+const held = t => J?.positions.find(p => p.ticker === t)?.shares ?? 0;
+const rel = t => Math.abs(t) >= 2
+  ? el('span', { className: 'badge ok', textContent: 'reliable', title: `t-stat ${t.toFixed(1)}: this link has held up in the data` })
+  : el('span', { className: 'badge weak', textContent: 'weak link', title: `t-stat ${t.toFixed(1)}: this link could easily be chance` });
+// Standard normal CDF (Abramowitz–Stegun 26.2.17)
+function Phi(x) {
+  const t = 1 / (1 + 0.2316419 * Math.abs(x)), d = 0.3989423 * Math.exp(-x * x / 2);
+  const p = d * t * (0.3193815 + t * (-0.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274))));
+  return x > 0 ? 1 - p : p;
+}
+
+function restoreSettings() {
+  let s = {}; try { s = JSON.parse(localStorage.getItem('fl-settings') || '{}'); } catch {}
+  for (const [k, v] of Object.entries(SETTINGS)) $(k).value = s[k] ?? v;
+}
+function saveSettings() {
+  try { localStorage.setItem('fl-settings', JSON.stringify(Object.fromEntries(Object.keys(SETTINGS).map(k => [k, $(k).value])))); } catch {}
+}
+
+function viewCard(o) {
+  const range = el('input', { type: 'range', min: o.min, max: o.max, step: o.step, value: o.value, 'aria-label': o.title + ' slider' });
+  const box = el('input', { className: 'num', id: o.id, value: o.value, inputMode: 'decimal', 'aria-label': 'Your view: ' + o.title });
+  range.oninput = () => { box.value = range.value; compute(); };
+  box.oninput = () => { range.value = box.value; compute(); };
+  box.dataset.def = o.value;
+  return el('div', { className: 'vcard' },
+    el('div', { className: 'vhead' }, el('h3', { textContent: o.title }), o.badge || ''),
+    el('div', { className: 'vnow', textContent: o.now }),
+    el('p', { className: 'vsens', textContent: o.sentence }),
+    o.list ? el('ul', { className: 'vwhy' }, ...o.list.map(x => el('li', { textContent: x }))) : el('p', { className: 'vwhy', textContent: o.why }),
+    el('div', { className: 'vinput' }, el('span', { className: 'vlabel', textContent: 'Your view' }), range, box, el('span', { className: 'unit', textContent: o.unit })),
+    el('div', { className: 'vadds' }, 'Adds ', el('strong', { id: o.adds, textContent: '—' }), ' to the forecast'));
+}
+
+function build() {
+  const v = M.vars, m = M.market, T = M.ticker;
+  $('ticker').value = T;
+  $('title').textContent = T + (v.name ? ' · ' + v.name : '');
+  $('price').textContent = usd2(v.price);
+  $('asof').replaceChildren(el('span', { textContent: M.asof === iso(nyNow()) && marketOpen() ? 'Live' : 'Last close ' + nice(M.asof) }), ` · ${M.sector_name} sector ${M.auto ? '(detected)' : '(your pick)'}`);
+  $('sector').replaceChildren(...Object.entries(M.sectors).map(([k, n]) => el('option', { value: k, textContent: n, selected: k === M.sector })));
+  document.querySelectorAll('.hz').forEach(e => e.textContent = HZ[H]);
+
+  const lvl = d => d.unit === 'pp' ? d.level.toFixed(2) + '%' : d.level.toLocaleString('en-US', { maximumFractionDigits: 2 });
+  $('views').replaceChildren(
+    viewCard({ id: 'v_mkt', adds: 'a_mkt', title: 'Stock market (S&P 500)', badge: rel(m.t),
+      now: `Last ${HZ[H]}: ${pc(m.chg[H])} · 5-year average: ${pc(m.avg[H])}`,
+      sentence: `When the S&P 500 moves +1%, ${T} has moved ${signed(m.beta)}% on average.`,
+      why: 'Most stocks rise and fall with the overall market.', unit: '%', min: -5, max: 5, step: 0.01, value: (m.avg[H] * 100).toFixed(2) }),
+    ...M.drivers.map(d => viewCard({ id: 'v_' + d.key, adds: 'a_' + d.key, title: d.label, badge: rel(d.t),
+      now: `Now ${lvl(d)} · last ${HZ[H]}: ${d.unit === 'pp' ? pp(d.chg[H]) : pc(d.chg[H], 1)}`,
+      sentence: d.unit === 'pp' ? `When it rises 0.1 pp, ${T} has moved ${signed(d.beta * 10)}% on average.` : `When it moves +1%, ${T} has moved ${signed(d.beta)}% on average.`,
+      why: d.why, unit: d.unit === 'pp' ? 'pp' : '%', min: d.unit === 'pp' ? -0.5 : -10, max: d.unit === 'pp' ? 0.5 : 10, step: d.unit === 'pp' ? 0.01 : 0.1, value: 0 })),
+    viewCard({ id: 'adj', adds: 'a_adj', title: 'Your own adjustment', now: 'For news the numbers above miss',
+      sentence: `Worth watching for ${M.sector_name.toLowerCase()} stocks:`, list: M.watch, unit: '%', min: -5, max: 5, step: 0.01, value: 0 }));
+
+  const old = Object.fromEntries(SIGNALS.map(s => [s.k, $('g_' + s.k) ? $('g_' + s.k).value : s.w]));
+  $('sig').replaceChildren(...SIGNALS.map(s => {
+    const z = v['z_' + s.k], g = el('input', { id: 'g_' + s.k, value: old[s.k], inputMode: 'decimal', 'aria-label': s.label + ' weight' });
+    g.oninput = compute;
+    return el('tr', {}, el('td', { textContent: s.label }), el('td', { className: 'm r', textContent: pc(v[s.k], 1) }),
+      el('td', { className: 'm r', textContent: z == null ? '—' : signed(z) }), el('td', { className: 'r' }, g, ' %/mo'), el('td', { className: 'm r', id: 'a_' + s.k }));
+  }));
+  if (v.spread_bps != null) $('cost').value = Math.max(1, v.spread_bps + 1).toFixed(1);
+  compute();
+}
+
+function renderModel(MH) {
+  if (!MH) { $('modelNote').textContent = 'Loading…'; $('modelRows').replaceChildren(); $('modelFine').textContent = ''; return; }
+  const o = MH.oos;
+  $('modelNote').textContent = MH.passed
+    ? `Added to the forecast. Tested on 2019–today: when it picked a side it was right ${(o.hit * 100).toFixed(1)}% of the time (always buying: ${(o.hit_always_up * 100).toFixed(1)}%), and trading its calls beat always buying by ${pc(o.edge, 3)} a day (t = ${o.edge_t.toFixed(1)}). A real but very small edge.`
+    : `Not added: for a ${BTN[H]} trade this model did not beat always buying in the 2019–today test` + (o ? ` (edge ${pc(o.edge, 3)} a day, t = ${o.edge_t.toFixed(1)}; 2 or more needed).` : '.');
+  $('modelRows').replaceChildren(...MH.rows.map(r => el('tr', { className: MH.passed ? '' : 'off' }, el('td', { textContent: r.desc }),
+    el('td', { className: 'm r', textContent: r.z == null ? '—' : signed(r.z) }),
+    el('td', { className: 'm r', textContent: pc(r.w, 3) }),
+    el('td', { className: 'm r ' + cls(MH.passed ? r.adds : 0), textContent: MH.passed && r.adds != null ? pc(r.adds, 3) : '—' }))));
+  const qv = (n, x) => x == null ? '—' : n === 'earn_ahead' ? (x ? 'Yes' : 'No') : n.startsWith('earn') ? (x ? pc(x / 100, 1) : 'none') : (x > 0 ? '+' : '') + x;
+  $('qualNote').textContent = MH.qual_use ? 'These passed their test and are part of the forecast.'
+    : 'Tested the same way (2013–2018, then 2019–today). None improved the forecast, so they are shown for context and add nothing. Earnings beats did predict a small drift up until 2018, then stopped working.';
+  $('qualRows').replaceChildren(...MH.qual.map(q => el('tr', {}, el('td', { textContent: q.desc }),
+    el('td', { className: 'm r', textContent: qv(q.name, q.value) }),
+    el('td', {}, el('span', { className: 'badge ' + (q.both ? 'ok' : Math.abs(q.in_t) >= 2 ? 'weak' : 'down'),
+      textContent: q.both ? 'Passed both periods' : Math.abs(q.in_t) >= 2 ? 'Worked 2013–18, not since' : 'No edge found' })))));
+  $('modelFine').textContent = `${MH.tested} signals were tested on 35 large stocks and ETFs; only these were strong enough in 2010–2018 to use. "Today" is how unusual the signal is (0 = normal, ±2 = rare). Weight = % added per unit.`;
+}
+
+function setAdds(id, c, d = 2) { $(id).textContent = pc(c, d); $(id).className = cls(c); }
+
+function renderBreakdown(rows, total) {
+  const max = Math.max(...rows.map(r => Math.abs(r[1])), Math.abs(total), 1e-9);
+  const TAG = { tested: ['tested', 't-tested'], view: ['your view', 't-yours'], setting: ['setting', 't-yours'], learned: ['learned', 't-mix'] };
+  const row = (label, x, isTotal, tag) => {
+    const bar = el('div', { className: 'bbar ' + (x < 0 ? 'neg' : 'pos') });
+    const w = 50 * Math.abs(x) / max;
+    bar.style.cssText = `left:${x < 0 ? 50 - w : 50}%;width:${w}%`;
+    return el('div', { className: 'brow' + (isTotal ? ' total' : '') }, el('span', {}, label, tag ? el('span', { className: 'btag ' + TAG[tag][1], textContent: TAG[tag][0] }) : ''),
+      el('div', { className: 'btrack' }, bar), el('span', { className: 'bval ' + cls(x), textContent: pc(x, Math.abs(x) < 0.001 && x !== 0 ? 3 : 2) }));
+  };
+  $('breakdown').replaceChildren(...rows.map(r => row(r[0], r[1], false, r[2])), row('Expected move of the stock', total, true));
+}
+
+function renderRange(mu, s) {
+  const lo = mu - 2.4 * s, hi = mu + 2.4 * s, x = v => (v - lo) / (hi - lo) * 100;
+  const band = (a, b, c) => { const e = el('div', { className: 'rband ' + c }); e.style.cssText = `left:${x(a)}%;width:${x(b) - x(a)}%`; return e; };
+  const mark = el('div', { className: 'rmark', title: 'Most likely' }); mark.style.left = x(mu) + '%';
+  const kids = [band(mu - 1.645 * s, mu + 1.645 * s, 'outer'), band(mu - s, mu + s, 'inner'), mark];
+  if (x(0) > 2 && x(0) < 98) { const z = el('div', { className: 'rzero' }); z.style.left = x(0) + '%'; kids.push(z); }
+  $('rtrack').replaceChildren(...kids);
+  $('rlabels').replaceChildren(
+    el('span', {}, 'Down case (1 in 20)', el('b', { textContent: pc(mu - 1.645 * s, 1) })),
+    el('span', {}, 'Most likely', el('b', { textContent: pc(mu) })),
+    el('span', {}, 'Up case (1 in 20)', el('b', { textContent: pc(mu + 1.645 * s, 1) })));
+  $('rnote').textContent = `2 out of 3 times the result should land between ${pc(mu - s, 1)} and ${pc(mu + s, 1)} (darker band).`;
+}
+
+function compute() {
+  if (!M) return;
+  const v = M.vars, m = M.market;
+  const parts = [{ label: 'Stock market', c: m.beta * num('v_mkt') / 100, id: 'a_mkt', show: `${m.beta.toFixed(2)}×${pc(num('v_mkt') / 100)}` }];
+  for (const d of M.drivers) {
+    const move = d.unit === 'pp' ? num('v_' + d.key) : num('v_' + d.key) / 100;
+    parts.push({ label: d.label, c: d.beta * move, id: 'a_' + d.key, show: `${d.beta.toFixed(3)}×${d.unit === 'pp' ? pp(move) : pc(move)}` });
+  }
+  let muF = 0;
+  for (const p of parts) { muF += p.c; setAdds(p.id, p.c); }
+  let muS = 0; const sShow = [];
+  for (const s of SIGNALS) {
+    const z = v['z_' + s.k] ?? 0, g = num('g_' + s.k), c = (H / 21) * g / 100 * z;
+    muS += c; setAdds('a_' + s.k, c, 3); sShow.push(`${g}%×${z.toFixed(2)}`);
+  }
+  const adj = num('adj') / 100; setAdds('a_adj', adj);
+  // Day trade only: buy at the open, sell at the close (model h=0).
+  const MH = ST && ST.ticker === M.ticker ? ST.model[H - 1] : null;
+  const muT = MH?.passed ? MH.rows.reduce((a, r) => a + (r.adds ?? 0), 0) : 0;
+  renderModel(MH);
+  // Tested gap signal (passed the locked 2023+ test): only for a same-day trade, once today's open is known.
+  const G = SG?.t === M.ticker && SG.ranked ? SG.signals.gap_D_rel : null;
+  const muG = H === 1 && SG?.live && G ? G.edge : 0;
+  const mu = muF + muS + adj + muT + muG;
+  const C = J ? J.calib : { n: 0, k: 1 }, muK = C.k * mu;
+  const sd = v.vol_63d, sH = sd * Math.sqrt(H);
+  // Long if the move beats costs; short if the drop beats costs (and shorts are allowed); otherwise no trade.
+  const cost = num('cost') / 1e4, longEdge = muK - cost, shortEdge = -muK - cost;
+  const side = longEdge > 0 ? 'long' : $('shorts').checked && shortEdge > 0 ? 'short' : 'none';
+  const edge = side === 'short' ? shortEdge : longEdge;   // the trade's average return after costs
+  const pWin = Phi(edge / sH);
+  const lam = Math.max(num('lam'), 0.01), maxw = num('maxw') / 100;
+  const wStar = edge / (lam * sH * sH), size = side === 'none' ? 0 : Math.min(maxw, wStar), w = side === 'short' ? -size : size;
+  const E = num('equity'), pos = size * E, expD = pos * edge, swing = pos * sH, bad = expD - 1.645 * swing;
+
+  const stat = (id, t, c = '') => { $(id).textContent = t; $(id).className = c; };
+  stat('tMu', (muK >= 0 ? '▲ ' : '▼ ') + pc(muK), cls(muK)); stat('tP', (pWin * 100).toFixed(0) + '%');
+  $('tPnote').textContent = side === 'short' ? 'if you short it, after costs' : 'if you buy it, after costs';
+  stat('tW', side === 'none' ? 'None' : `${side === 'short' ? 'Short' : 'Long'} ${(size * 100).toFixed(1)}%`); stat('tD', usd(expD), cls(expD));
+
+  renderBreakdown([...parts.map(p => [p.label, p.c, 'view']), ['Momentum signals', muS, 'setting'], ['Tested day-trading model', muT, 'tested'], ["Tested gap signal (today's open)", muG, 'tested'], ['Your adjustment', adj, 'view'],
+    [`Learned from your logged trades (×${C.k.toFixed(2)})`, muK - mu, 'learned']], muK);
+  renderRange(muK, sH);
+
+  const S = [
+    ['Factor return', pc(muF), `μ_f = β_mkt·view + Σ β·driver view = ${parts.map(p => p.show).join(' + ')}`,
+      'What the stock should do if the market and the sector drivers move the way you said, using how it has reacted to them before.'],
+    ['Signal tilt', pc(muS, 3), `μ_s = (H/21)·Σ weight·z = (${H}/21)·(${sShow.join(' + ')})`, 'Extra return from momentum-type signals, scaled to the horizon.'],
+    ['Tested signals', pc(muT, 3), MH?.passed ? `μ_t = Σ weight·z = ${MH.rows.map(r => `${(r.w * 100).toFixed(3)}%×${r.z == null ? '—' : signed(r.z)}`).join(' + ')}` : 'μ_t = 0 (the model for this length did not pass its test)',
+      'Signals that predicted the next move in 2010–2018 and held up in 2019–today.'],
+    ['Expected return', pc(mu), `μ = μ_f + μ_s + μ_t + adjustment = ${pc(muF)} + ${pc(muS, 3)} + ${pc(muT, 3)} + ${pc(adj)}`, 'Your full forecast for the price change before trading costs.'],
+    ['Learned adjustment', pc(muK), `μ_k = k·μ = ${C.k.toFixed(2)} × ${pc(mu)}`,
+      C.n ? `Scaled by how your ${C.n} checked forecasts turned out (right ${(C.hit * 100).toFixed(0)}% of the time). k moves slowly toward what the results show.`
+          : 'No checked forecasts yet, so k = 1.00 (no change). Log forecasts and it learns once their check dates pass.'],
+    ['Risk over the horizon', pc(sH).replace('+', ''), `σ_H = σ_daily·√H = ${(sd * 100).toFixed(2)}% × √${H}`, 'A typical swing over this period, in either direction.'],
+    ['Likely range', `${pc(muK - sH, 1)} to ${pc(muK + sH, 1)}`, `68%: μ_k ± σ_H    90%: ${pc(muK - 1.645 * sH, 1)} to ${pc(muK + 1.645 * sH, 1)}`,
+      'Where the stock should end up: about 2 out of 3 times in the first range, 9 out of 10 in the second.'],
+    ['Pick a side', side === 'none' ? 'No trade' : side === 'short' ? 'Short' : 'Buy',
+      `buy: μ_k − cost = ${pc(longEdge)}    short: −μ_k − cost = ${pc(shortEdge)}${$('shorts').checked ? '' : ' (shorts off)'}`,
+      'Take the side whose average result beats the trading cost. If neither does, no trade.'],
+    ['Chance this trade makes money', (pWin * 100).toFixed(1) + '%', `P = Φ(edge / σ_H) = Φ(${(edge / sH).toFixed(3)})`,
+      'How often the trade should end in profit after costs. Close to 50% means the forecast is small next to the noise.'],
+    ['Position size', side === 'none' ? '0%' : `${side === 'short' ? 'short ' : ''}${(size * 100).toFixed(1)}%`,
+      `w* = edge / (λ·σ_H²) = ${pc(edge)} / (${lam}×${(sH * 100).toFixed(2)}%²) = ${(wStar * 100).toFixed(1)}%, capped at ${(maxw * 100).toFixed(0)}%`,
+      'Bigger edge → bigger position, bigger risk → smaller position.'],
+    ['Money', `${usd(pos)} ${side === 'short' ? 'short' : 'position'}`, `expected ${usd(expD)} · typical swing ±${usd(swing)} · bad case (1 in 20) ${usd(bad)}`, 'The same numbers in dollars for your account size.'],
+  ];
+  $('steps').replaceChildren(...S.map(([t, r, f, d], i) => el('li', {}, el('span', { className: 'n', textContent: i + 1 }),
+    el('div', { className: 't' }, t, el('output', { textContent: r })), el('div', { className: 'f', textContent: f }), el('div', { className: 'd', textContent: d }))));
+  $('fine').replaceChildren(
+    el('span', { textContent: `Model fit: the market and these drivers explain ${(M.fit.r2 * 100).toFixed(0)}% of ${M.ticker}'s weekly moves (${M.fit.weeks} weeks since ${M.fit.since}). The rest is company-specific.` }),
+    el('span', { textContent: `Yearly Sharpe of this trade: ${(edge / sH * Math.sqrt(252 / H)).toFixed(2)}. Above about 0.5 is a strong forecast; most real ones are lower.` }));
+  $('setSummary').textContent = `Account ${usd(num('equity'))} · max ${num('maxw')}% per stock · caution ${num('lam')} · cost ${(num("cost") / 100).toFixed(2)}% · shorts ${$('shorts').checked ? 'on' : 'off'}`;
+
+  pending = { forecast: { mu_raw: mu, mu: muK, mu_net: edge, sigma: sH, p_win: pWin, w, side, k: C.k },
+    views: { market: num('v_mkt'), drivers: Object.fromEntries(M.drivers.map(d => [d.key, num('v_' + d.key)])), adjustment: num('adj'),
+      weights: Object.fromEntries(SIGNALS.map(s => [s.k, num('g_' + s.k)])) } };
+  renderAction(w, muK, edge, pWin, side);
+  renderPlain({ side, pos, edge, expD, swing, bad, pWin, cost });
+}
+
+// Chance a single trade beats cost c, from the measured return quantiles of 2023+ trades.
+function winAt(q, c) {
+  const i = q.findIndex(x => x > c);
+  if (i < 0) return 0;
+  if (i === 0) return 1;
+  return 1 - (i - 1 + (c - q[i - 1]) / (q[i] - q[i - 1])) / (q.length - 1);
+}
+function renderPlain(o) {
+  const T = M.ticker, c = o.cost, pct = x => (x * 100).toFixed(1) + '%';
+  $('plainWhen').textContent = H === 1 ? 'Buy at the open, sell at the close the same day.' : 'Buy at the open, sell at the close the next trading day.';
+  const rows = [
+    ['What to do', o.side === 'none' ? 'No trade' : `${$('aWhat').textContent} (about ${usd(o.pos)})`, o.side === 'none' ? 'The expected move does not beat the costs.' : `${o.side === 'short' ? 'Short' : 'Buy'} ${T}. ${$('conf').textContent}.`],
+    ['Chance it makes money', o.side === 'none' ? '—' : pct(o.pWin), 'From the forecast, after costs. Under 53% is a coin flip. It is only as good as the forecast\'s average.'],
+    ['Expected profit', o.side === 'none' ? '—' : usd(o.expD), o.side === 'none' ? '' : `Average result after costs: ${pc(o.edge, 3)} of what you put in.`],
+    ['Costs', o.side === 'none' ? '—' : usd(o.pos * c), `${(c * 100).toFixed(2)}% round trip (spread + fees). Change it in Settings.`],
+    ['Typical swing', o.side === 'none' ? '—' : '±' + usd(o.swing), '2 out of 3 trades end inside this range.'],
+    ['Bad case (1 in 20)', o.side === 'none' ? '—' : usd(o.bad), 'About one trading day a month goes this badly or worse.'],
+  ];
+  if (SG?.t === T && SG.available) {
+    const when = SG.live ? 'Today' : `Last session (${nice(SG.date)})`;
+    for (const [k, label] of [['gap_D_rel', 'Gap-down signal · same-day trade'], ['vol_surprise', 'High-volume signal · overnight trade']]) {
+      const g = SG.signals[k];
+      if (!SG.ranked) { rows.push([label, 'Not ranked', 'Only S&P 500 stocks are ranked (not ETFs).']); continue; }
+      const rank = Math.round((1 - g.pct) * SG.n) + 1, w = winAt(g.fifth_stats.quantiles, c), wa = winAt(g.all.quantiles, c);
+      const what = k === 'gap_D_rel' ? `opened ${pc(g.raw, 1)}` : `${g.raw.toFixed(1)}× normal volume`;
+      const use = k === 'gap_D_rel'
+        ? (!SG.live ? ' Today\'s gap fills in at 9:30 AM ET.' : H === 1 ? ' Added to the forecast above.' : ' Not added: it is for same-day trades (pick 1 day).')
+        : ' A separate trade: buy near the close, sell at the next open.';
+      rows.push([label, `${when}: ${what} · #${rank} of ${SG.n}${g.fifth === 5 ? ' (top fifth)' : ''}`,
+        `Since 2023, stocks ranked like this won ${pct(w)} of trades at your costs (average stock ${pct(wa)}), averaging ${pc(g.fifth_stats.avg - c, 3)} per trade.${use}`]);
+    }
+  }
+  rows.push(['How proven', 'Mixed', 'Gap and volume signals: passed a locked 2023–today test. 1-day model: passed, barely. Market and sector sliders: your own views, not tested.']);
+  $('plain').replaceChildren(...rows.map(([a, b, n]) => el('tr', {}, el('th', { scope: 'row', textContent: a }), el('td', { className: 'm', textContent: b }), el('td', { className: 'hint', textContent: n }))));
+}
+
+const INVERSE = { SPY: 'SH', QQQ: 'PSQ', DIA: 'DOG', IWM: 'RWM' };  // verified to exist on Yahoo, 2026-10-16
+function renderAction(w, muK, edge, pWin, side) {
+  const T = M.ticker, price = M.vars.price, have = held(T);
+  const target = Math.trunc(w * num('equity') / price * 100) / 100, delta = +(target - have).toFixed(2);  // fractional, signed
+  let act, qty = Math.abs(delta), then = '';
+  if (delta === 0 || Math.abs(delta * price) < num('mintrade')) act = 'HOLD';
+  else if (have > 0 && target < 0) { act = 'SELL'; qty = have; then = ` After that, short ${sh(-target)}.`; }
+  else if (have < 0 && target > 0) { act = 'COVER'; qty = -have; then = ` After that, buy ${sh(target)}.`; }
+  else if (target >= 0 && have >= 0) act = delta > 0 ? 'BUY' : 'SELL';
+  else act = delta < 0 ? 'SHORT' : 'COVER';
+  const VERB = { BUY: 'Buy', SELL: 'Sell', SHORT: 'Short', COVER: 'Buy back' };
+  $('decision').dataset.act = act;
+  $('dEyebrow').textContent = `What to do now · ${T} · next ${HZ[H]}`;
+  $('aWhat').textContent = act === 'HOLD' ? 'Hold' : `${VERB[act]} ${sh(qty)} share${qty === 1 ? '' : 's'}`;
+  const [cl, cc] = side === 'none' ? ['No edge', 'weak'] : pWin < 0.53 ? ['Coin flip', 'weak'] : pWin < 0.6 ? ['Slight edge', 'mid'] : pWin < 0.7 ? ['Moderate edge', 'ok'] : ['Strong edge', 'ok'];
+  $('conf').textContent = cl; $('conf').className = 'badge ' + cc;
+  const move = `${muK >= 0 ? 'rise' : 'fall'} ${pc(Math.abs(muK)).slice(1)} over the next ${HZ[H]}`;
+  let why = side === 'none'
+    ? `The model expects ${T} to ${move}. That is smaller than the trading cost${muK < 0 && !$('shorts').checked ? ' (and short selling is off in Settings)' : ''}, so it suggests no position.`
+    : `The model expects ${T} to ${move}. ${side === 'short' ? 'Shorting' : 'Buying'} it makes ${pc(edge)} on average after costs and makes money ${(pWin * 100).toFixed(0)}% of the time. That supports ${side === 'short' ? 'being short' : 'owning'} ${sh(Math.abs(target))} shares (${usd(Math.abs(target) * price)}, ${(Math.abs(w) * 100).toFixed(1)}% of your account).`;
+  why += ` You ${have > 0 ? `own ${sh(have)} shares` : have < 0 ? `are short ${sh(-have)} shares` : 'have no position'} now.` + then;
+  if (act === 'HOLD' && delta !== 0) why += ` The change (${usd(Math.abs(delta * price))}) is below your ${usd(num('mintrade'))} minimum trade.`;
+  if (side === 'short') why += ` Shorting needs a margin account (usually $2,000 or more), and most brokers can't short fractional shares.` +
+    (INVERSE[T] ? ` In a regular cash account, buy ${INVERSE[T]} instead: a fund that rises about 1% when ${T} falls 1%.` : ' There is no simple 1× inverse fund for this one in the list here.');
+  $('aWhy').textContent = why;
+  // Check again at the end of the horizon, or the day before earnings if they come first.
+  let n = H, nw = `End of this forecast (${BTN[H]}).`;
+  const de = M.vars.days_to_earn;
+  if (de != null && de >= 1 && de <= H) { n = de - 1; nw = `The day before earnings (in ${de} trading days). Earnings can move the stock far more than this forecast.`; }
+  const review = addBiz(n);
+  $('aNext').textContent = review.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+  $('aNextWhy').textContent = nw;
+  $('lShares').value = act === 'HOLD' ? 0 : sh(qty);
+  $('lPrice').value = price.toFixed(2);
+  $('logBtn').textContent = act === 'HOLD' ? 'Log this hold' : 'I did this · log it';
+  Object.assign(pending, { action: act, review_date: iso(review) });
+}
+
+let ST = null, SH = 0, SG = null;
+async function loadSignals(t) {
+  try { const r = await fetch('/api/signals?t=' + encodeURIComponent(t)); SG = { ...(await r.json()), t }; } catch { SG = null; }
+  compute();
+}
+const HN = { 0: 'Same day', 1: 'Next day' };
+async function loadSetups(t) {
+  $('setupNote').textContent = 'Checking today\'s setups…';
+  try {
+    const r = await fetch('/api/setups?t=' + encodeURIComponent(t)); const d = await r.json();
+    if (!r.ok) throw new Error(d.error);
+    ST = d; renderSetups(); compute();
+  } catch (e) { $('setupNote').textContent = e.message; }
+}
+function renderSetups() {
+  $('holdSeg').replaceChildren(...[0, 1].map(h => {
+    const b = el('button', { type: 'button', textContent: HN[h], className: h === SH ? 'on' : '' });
+    b.onclick = () => { SH = h; renderSetups(); };
+    return b;
+  }));
+  const rows = [...ST.setups].sort((a, b) => (b.active !== false) - (a.active !== false));
+  const nAct = rows.filter(s => s.active === true).length, nOpen = rows.filter(s => s.active === 'open').length;
+  const nVer = rows.filter(s => s.results[SH].verified).length;
+  $('setupNote').textContent = (ST.asof === iso(nyNow()) && marketOpen() ? 'Based on today\'s price so far; these can change until the 4 PM ET close. ' : '') + `${nAct} of ${rows.length} setups are active for ${ST.ticker} going into ${nice(ST.next_day)}` +
+    (nOpen ? `; ${nOpen} more depend on how it opens` : '') + '. ' +
+    (nVer ? `${nVer} passed the test.` : 'None passed the test, so treat them as background information, not a reason to trade.');
+  $('setups').replaceChildren(...rows.map(s => {
+    const r = s.results[SH], o = r.out_of_sample, i = r.in_sample;
+    const today = s.active === true ? el('span', { className: 'badge ok', textContent: 'Active' }) : s.active === 'open' ? el('span', { className: 'badge mid', textContent: 'Check at open' }) : '—';
+    const [vt, vc] = r.verified ? ['Passed both tests', 'ok'] : i && i.t_edge >= 2 && i.avg > 0 ? ['Worked 2010–18, not since', 'weak'] : ['No edge found', 'down'];
+    return el('tr', { className: s.active === false ? 'off' : '' }, el('td', { textContent: s.desc }), el('td', {}, el('span', { className: 'badge ' + (s.side === 'short' ? 'down' : 'mid'), textContent: s.side === 'short' ? 'Short' : 'Buy' })), el('td', {}, today),
+      el('td', { className: 'm r', textContent: o ? (o.win * 100).toFixed(0) + '%' : '—' }),
+      el('td', { className: 'm r ' + (o ? cls(o.avg) : ''), textContent: o ? pc(o.avg) : '—' }),
+      el('td', { className: 'm r', textContent: o ? usd(o.avg * 100) : '—' }),
+      el('td', { className: 'm r neg', textContent: o ? pc(o.worst, 1) : '—' }),
+      el('td', {}, el('span', { className: 'badge ' + vc, textContent: vt })));
+  }));
+  $('setupFine').textContent = `Win rate, average and worst trade are from 2019 to today, after ${(ST.cost * 1e4).toFixed(0)} bps of costs, across ${ST.universe} large stocks and ETFs (not ${ST.ticker} alone). ` +
+    `For comparison, buying any of them on a random morning and selling ${HN[SH].toLowerCase()} averaged ${pc(rows[0].results[SH].out_of_sample_baseline)}. ` +
+    `"Passed" requires beating that in 2010–2018 and again in 2019–today. Tested ${nice(ST.tested_on)}.`;
+}
+
+async function loadJournal() { try { J = await (await fetch('/api/journal')).json(); } catch { J = null; } }
+
+async function load(t, sector, quiet) {
+  if (!quiet) { $('main').classList.add('loading'); $('status').className = ''; $('status').textContent = `Loading ${t}… the first load of a stock takes a few seconds.`; }
+  const keep = quiet ? [...document.querySelectorAll('.vinput .num')].map(b => [b.id, b.value]) : [];
+  try {
+    const [r] = await Promise.all([fetch('/api/forecast?t=' + encodeURIComponent(t) + (sector ? '&s=' + sector : '')), loadJournal()]);
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error);
+    M = d; $('status').textContent = '';
+    try { localStorage.setItem('fl-ticker', d.ticker); } catch {}
+    history.replaceState(null, '', '?t=' + d.ticker);
+    build();
+    for (const [id, x] of keep) if ($(id)) { $(id).value = x; $(id).previousElementSibling.value = x; }
+    if (keep.length) compute();
+    if (quiet) tick();  // don't let the 1-minute forecast price overwrite the 5-second one
+    loadSetups(d.ticker);
+    loadSignals(d.ticker);
+  } catch (e) { $('status').className = 'err'; $('status').textContent = e.message; }
+  $('main').classList.remove('loading');
+}
+
+// Live mode: while the US market is open, pull fresh prices every minute (holidays not handled).
+function nyNow() { return new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' })); }
+const marketOpen = () => { const d = nyNow(), m = d.getHours() * 60 + d.getMinutes(); return d.getDay() % 6 > 0 && m >= 570 && m < 960; };
+setInterval(() => { if (M && marketOpen() && !document.hidden) load(M.ticker, M.auto ? undefined : M.sector, true); }, 60000);
+// The price itself updates every 5 seconds from the exchange's last trade; the label shows how old that trade is.
+async function tick() {
+  if (!M || !marketOpen() || document.hidden) return;
+  try {
+    const q = await (await fetch('/api/quote?t=' + M.ticker)).json();
+    if (q.ticker !== M.ticker || !q.price) return;
+    const age = Math.max(0, Math.round(Date.now() / 1000 - q.time));
+    M.vars.price = q.price; $('price').textContent = usd2(q.price);
+    $('asof').firstChild.textContent = (q.delayed_min ? `Delayed ${q.delayed_min} min` : 'Live') + ` · last trade ${age < 60 ? age + ' s' : Math.round(age / 60) + ' min'} ago`;
+    if (document.activeElement !== $('lPrice')) compute();
+  } catch {}
+}
+setInterval(tick, 5000);
+
+$('tform').onsubmit = e => { e.preventDefault(); const t = $('ticker').value.trim().toUpperCase(); if (t) load(t); };
+$('sector').onchange = () => load(M.ticker, $('sector').value);
+$('resetViews').onclick = () => {
+  document.querySelectorAll('.vinput .num').forEach(b => { b.value = b.dataset.def; b.previousElementSibling.value = b.dataset.def; });
+  compute();
+};
+for (const k of Object.keys(SETTINGS)) $(k).oninput = () => { saveSettings(); compute(); };
+$('shorts').onchange = () => { try { localStorage.setItem('fl-shorts', $('shorts').checked ? '1' : '0'); } catch {} compute(); };
+$('logBtn').onclick = async () => {
+  const body = { ...pending, ticker: M.ticker, sector: M.sector, horizon: H, shares: num('lShares'), price: num('lPrice') };
+  const r = await fetch('/api/journal', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  const d = await r.json();
+  $('logMsg').className = r.ok ? 'ok' : 'err';
+  $('logMsg').textContent = r.ok ? `Logged: ${d.action} ${d.ticker} on ${nice(d.date)}. Next check ${nice(d.review_date)}. It's on your Portfolio page.` : d.error;
+  if (r.ok) { await loadJournal(); compute(); }
+};
+
+restoreSettings();
+try { const v = localStorage.getItem('fl-shorts'); if (v) $('shorts').checked = v === '1'; } catch {}
+// "How to use" strip: shown until dismissed (per browser).
+try { $('start').hidden = localStorage.getItem('fl-start-hidden') === '1'; } catch { $('start').hidden = false; }
+$('startHide').onclick = () => { $('start').hidden = true; try { localStorage.setItem('fl-start-hidden', '1'); } catch {} };
+// Page map: highlight the part being read; opening a folded part when jumped to.
+const mapLinks = [...document.querySelectorAll('#pagemap a')];
+const spy = new IntersectionObserver(es => es.forEach(e => {
+  if (!e.isIntersecting) return;
+  const id = e.target.id === 'decision' ? 's-answer' : e.target.id;
+  mapLinks.forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + id));
+}), { rootMargin: '-80px 0px -65% 0px' });
+['decision', 's-numbers', 's-why', 's-tested', 's-setups', 's-views', 'setCard', 's-math', 's-words'].forEach(id => $(id) && spy.observe($(id)));
+mapLinks.forEach(a => a.addEventListener('click', () => { const t = document.querySelector(a.getAttribute('href')); if (t?.tagName === 'DETAILS') t.open = true; }));
+
+let t0 = new URLSearchParams(location.search).get('t'); try { t0 = t0 || localStorage.getItem('fl-ticker'); } catch {} t0 = t0 || 'AAPL';
+load(t0.toUpperCase());
+</script>
+</body>
+</html>
